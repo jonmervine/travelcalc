@@ -1,0 +1,4 @@
+Oct 07, 2015 5:44:25 PM Interface DoLogin
+SEVERE: ERROR: LOGIN/LIST ERROR: java.io.FileNotFoundException: C:\list.txt (The system cannot find the file specified)
+Oct 07, 2015 5:45:22 PM Interface DoLogin
+WARNING: WARNING: LOGIN-STAT error: java.lang.NumberFormatException: For input string: "Vulpes Pallida (sacrifice) 	Vulpes/Nature, passive 	L12 	342/749 	N100/D0/M65/E60 	Blank Gem (54.9%)"

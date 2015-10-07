@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="travelcalc">
+    <output-path>$PROJECT_DIR$/out/artifacts/travelcalc</output-path>
+    <root id="root">
+      <element id="archive" name="travelcalc.jar">
+        <element id="module-output" name="travelcalc" />
+      </element>
+    </root>
+  </artifact>
+</component>

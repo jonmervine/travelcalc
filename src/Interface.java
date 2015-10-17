@@ -6,11 +6,8 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -20,9 +17,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
@@ -39,17 +34,20 @@ import java.io.FileReader;
  */
 public class Interface extends javax.swing.JFrame {
 
-    String AppVersion = "3.10";
-    Crit[] owncreatures = new Crit[55];
-    Crit[] creatures = new Crit[55];
+    Battle battle = new Battle();
+
+    String AppVersion = "4.0.0";
+
+    List<Crit> ownCreatures = new ArrayList<Crit>();
+    List<Crit> enemyCreatures = new ArrayList<Crit>();
+
     int CritAantal = 0;
     int OwnCritAantal = 0;
     /* debug features NORMAL: true DEBUGMODE: false */
     boolean TravStatChoice = true;
-    boolean DecodePass = true;
     int DeadCrits = 0;
     int DIPCrits = 0;
-    StringBuilder gevecht = new StringBuilder("");
+    StringBuilder sb = new StringBuilder("");
     int ownExtraIthHealth = 0;
     int ownExtraIthDamage = 0;
     int ownExtraIthDefences = 0;
@@ -64,18 +62,16 @@ public class Interface extends javax.swing.JFrame {
     int AantalBadCalcs = 0;
     int AantalGoodCalcs = 0;
     boolean loggedIn = false;
-    int[][] nummers = new int[55][2];
     boolean ToggleOnTop = false;
     boolean ToggleSmallWindow = false;
     boolean ShowFullBattles = false;
     boolean ToggleClipListener = true;
     boolean ToggleResCalc = true;
-    String okSound = "ok.wav";
-    String warningSound = "warning.wav";
-    String failureSound = "failure.wav";
+    String okSound = "/travelcalc/ok.wav";
+    String warningSound = "/travelcalc/warning.wav";
+    String failureSound = "/travelcalc/failure.wav";
     private static Logger theLogger = Logger.getLogger(Interface.class.getName());
     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-    Field field;
     Integer Brim = 0;
     Integer Crys = 0;
     Integer Ess = 0;
@@ -1079,24 +1075,24 @@ public class Interface extends javax.swing.JFrame {
         for (int i = 0; i < OwnCritAantal; i++) {
 
             String enchant = "";
-            if (owncreatures[i].getMaIm().length() > 0) {
-                enchant = "* (<font color='#FF8000'>MaIm</font> " + owncreatures[i].getMaIm() + ")";
-            } else if (owncreatures[i].getMaBe().length() > 0) {
-                enchant = "* (<font color='#800000'>MaBe</font> " + owncreatures[i].getMaBe() + ")";
-            }
+//            if (owncreatures[i].getMaIm().length() > 0) {
+//                enchant = "* (<font color='#FF8000'>MaIm</font> " + owncreatures[i].getMaIm() + ")";
+//            } else if (owncreatures[i].getMaBe().length() > 0) {
+//                enchant = "* (<font color='#800000'>MaBe</font> " + owncreatures[i].getMaBe() + ")";
+//            }
 
             String klas = "";
-            if (owncreatures[i].getType().equals("forest")) {
+            if (ownCreatures.get(i).getRace().equals("forest")) {
                 klas = "<font color='#004000'>forest</font>";
-            } else if (owncreatures[i].getType().equals("air")) {
+            } else if (ownCreatures.get(i).getRace().equals("air")) {
                 klas = "<font color='#004080'>air</font>";
-            } else if (owncreatures[i].getType().equals("earth")) {
+            } else if (ownCreatures.get(i).getRace().equals("earth")) {
                 klas = "<font color='#FF8040'>earth</font>";
-            } else if (owncreatures[i].getType().equals("death")) {
+            } else if (ownCreatures.get(i).getRace().equals("death")) {
                 klas = "<font color='#800000'>death</font>";
             }
 
-            totalStr += "<tr><td>" + (i + 1) + ".</td><td><b>" + owncreatures[i].getName() + "</b></td><td>" + owncreatures[i].getFamily() + "/" + klas + "</td><td>" + owncreatures[i].getLevel() + "</td><td><font color='#800000'>" + owncreatures[i].getDamage() + "</font>/<font color='#800000'>" + owncreatures[i].getHealth() + "</font></td><td>F" + owncreatures[i].getForestDefence() + "/D" + owncreatures[i].getDeathDefence() + "/A" + owncreatures[i].getAirDefence() + "/E" + owncreatures[i].getEarthDefence() + "</td><td><font color='#000080'>" + owncreatures[i].getItem() + "</font>" + enchant + "</td></tr>";
+            totalStr += "<tr><td>" + (i + 1) + ".</td><td><b>" + ownCreatures.get(i).getName() + "</b></td><td>" + ownCreatures.get(i).getType() + "/" + klas + "</td><td>" + ownCreatures.get(i).getLevel() + "</td><td><font color='#800000'>" + ownCreatures.get(i).getDamage() + "</font>/<font color='#800000'>" + ownCreatures.get(i).getHealth() + "</font></td><td>F" + ownCreatures.get(i).getElementalDef() + "/D" + ownCreatures.get(i).getDiabolicDef() + "/A" + ownCreatures.get(i).getMysticDef() + "/E" + ownCreatures.get(i).getNatureDef() + "</td><td><font color='#000080'>" + ownCreatures.get(i).getItem() + "</font>" + enchant + "</td></tr>";
         }
         totalStr += "</table></body></html>";
         critlistField.setText(totalStr);
@@ -1128,19 +1124,19 @@ public class Interface extends javax.swing.JFrame {
             for (int i = 0; i < OwnCritAantal; i++) {
 
                 String enchant = "";
-                if (owncreatures[i].getMaIm().length() > 0) {
-                    enchant = "*(MaIm " + owncreatures[i].getMaIm() + ")";
-                } else if (owncreatures[i].getMaBe().length() > 0) {
-                    enchant = "*(MaBe " + owncreatures[i].getMaBe() + ")";
-                }
+//                if (ownCreatures.get(i).getMaIm().length() > 0) {
+//                    enchant = "*(MaIm " + ownCreatures.get(i).getMaIm() + ")";
+//                } else if (ownCreatures.get(i).getMaBe().length() > 0) {
+//                    enchant = "*(MaBe " + ownCreatures.get(i).getMaBe() + ")";
+//                }
 
-                totalStr += owncreatures[i].getName() + "  " + owncreatures[i].getFamily() + "/" + owncreatures[i].getType() + ", passive  " + owncreatures[i].getLevel() + "  " + owncreatures[i].getDamage() + "/" + owncreatures[i].getHealth() + "  F" + owncreatures[i].getForestDefence() + "/D" + owncreatures[i].getDeathDefence() + "/A" + owncreatures[i].getAirDefence() + "/E" + owncreatures[i].getEarthDefence() + "  " + owncreatures[i].getItem() + "" + enchant + "<br>";
+                totalStr += ownCreatures.get(i).getName() + "  " + ownCreatures.get(i).getType() + "/" + ownCreatures.get(i).getRace() + ", passive  " + ownCreatures.get(i).getLevel() + "  " + ownCreatures.get(i).getDamage() + "/" + ownCreatures.get(i).getHealth() + "  F" + ownCreatures.get(i).getElementalDef() + "/D" + ownCreatures.get(i).getDiabolicDef() + "/A" + ownCreatures.get(i).getMysticDef() + "/E" + ownCreatures.get(i).getNatureDef() + "  " + ownCreatures.get(i).getItem() + "" + enchant + "<br>";
             }
 
             String totaleStr = "";
             for (int i = 0; i < CritAantal; i++) {
 
-                totaleStr += creatures[i].getName() + "  " + creatures[i].getFamily() + "/" + creatures[i].getType() + ", passive  " + creatures[i].getLevel() + "  " + creatures[i].getDamage() + "/" + creatures[i].getHealth() + "  F" + creatures[i].getForestDefence() + "/D" + creatures[i].getDeathDefence() + "/A" + creatures[i].getAirDefence() + "/E" + creatures[i].getEarthDefence() + "  " + "<br>";
+                totaleStr += enemyCreatures.get(i).getName() + "  " + enemyCreatures.get(i).getType() + "/" + enemyCreatures.get(i).getRace() + ", passive  " + enemyCreatures.get(i).getLevel() + "  " + enemyCreatures.get(i).getDamage() + "/" + enemyCreatures.get(i).getHealth() + "  F" + enemyCreatures.get(i).getElementalDef() + "/D" + enemyCreatures.get(i).getDiabolicDef() + "/A" + enemyCreatures.get(i).getMysticDef() + "/E" + enemyCreatures.get(i).getNatureDef() + "  " + "<br>";
             }
             critlistField.setText("<font color=\"#CC6600\">[yellow]Description of the bug:[/yellow]</font><br><br>" + "<font color=\"#CC6600\">[yellow]Encounter:[/yellow]</font><br><br>" + totaleStr + "<br><br><font color=\"#CC6600\">[yellow]Your List:[/yellow]</font><br><br>" + totalStr + "<br><br>");
             critlistField.setCaretPosition(0);
@@ -1823,9 +1819,9 @@ public class Interface extends javax.swing.JFrame {
         ExtraIthDefences = 0;
 
         /* alle eigen crits ongebruikt flaggen */
-        for (int i = 0; i < OwnCritAantal; i++) {
-            owncreatures[i].setUsed(false);
-        }
+//        for (int i = 0; i < OwnCritAantal; i++) {
+//            ownCreatures.get(i).setUsed(false);
+//        }
         boolean parseerror = false;
 
         if (travOrBattle == 1) {
@@ -1873,7 +1869,7 @@ public class Interface extends javax.swing.JFrame {
                 
                  **/
             }
-            gevecht.setLength(0);
+            sb.setLength(0);
 
             if (OwnCritAantal == 0) {
                 txtStatus.setBackground(Color.white);
@@ -1898,8 +1894,8 @@ public class Interface extends javax.swing.JFrame {
                 int j = 0;
                 int succes = 0;
 
-                ithIsInListAndInRange(1);
-                ithIsInListAndInRange(2);
+//                ithIsInListAndInRange(1);
+//                ithIsInListAndInRange(2);
 
 
                 //System.out.println(ownExtraIthHealth);
@@ -1907,18 +1903,28 @@ public class Interface extends javax.swing.JFrame {
 
                 /* probeer auto defend */
                 while (i < CritAantal && i < OwnCritAantal & !parseerror) {
-                    succes = doBattle(owncreatures[i], creatures[i]);
-                    //nummers[i][0]=i;
-                    //nummers[i][1]=succes;
-                    owncreatures[i].setUsed(true);
-                    creatures[i].setUsed(true);
+                    BattleNum++;
+                    CombatResult result = battle.doBattle(ownCreatures.get(i), enemyCreatures.get(i),
+                            BattleNum, sb, ShowFullBattles, countCritFamily(1, ownCreatures.get(i).getType()));
+
+                    switch(result) {
+                        case DEAD :
+                            DeadCrits++;
+                            break;
+                        case DIP:
+                            DIPCrits++;
+                            break;
+                        case ALIVE:
+                        default:
+                            break;
+                    }
                     i++;
                 }
                 /* controleer of alle
                 
                 for(int a=0;a<Math.min(CritAantal,OwnCritAantal);a++){
                 
-                gevecht+=a+" -> "+nummers[a][0]+"("+nummers[a][1]+"), ";
+                sb+=a+" -> "+nummers[a][0]+"("+nummers[a][1]+"), ";
                 
                 }
                 
@@ -1927,7 +1933,7 @@ public class Interface extends javax.swing.JFrame {
                 
                 
                 /* alle gevechten gedaan */
-                txtOutput.setText(gevecht.toString());
+                txtOutput.setText(sb.toString());
                 String status = "";
 
                 Date today = new Date();
@@ -1967,6 +1973,40 @@ public class Interface extends javax.swing.JFrame {
 
     }
 
+    private int countCritFamily(int wie, String fam) {
+        int tel = 0;
+        if (wie == 1) {
+            for (int i = 0; i < Math.min(CritAantal, OwnCritAantal); i++) {
+                if (ownCreatures.get(i).getType().equals(fam)) {
+                    tel++;
+                }
+            }
+        } else if (wie == 2) {
+            for (int i = 0; i < Math.min(CritAantal, OwnCritAantal); i++) {
+                if (enemyCreatures.get(i).getType().equals(fam)) {
+                    tel++;
+                }
+            }
+        } else if (wie == 3) {
+            /* ENKEL VOOR FIENDS ! niet familie vgl, maar aantal crits! check namen! */
+            for (int i = 0; i < Math.min(CritAantal, OwnCritAantal); i++) {
+                if (ownCreatures.get(i).getName().equals(fam)) {
+                    tel++;
+                }
+            }
+        } else if (wie == 4) {
+            /* ENKEL VOOR FIENDS ! niet familie vgl, maar aantal crits! check namen! */
+            for (int i = 0; i < Math.min(CritAantal, OwnCritAantal); i++) {
+                if (enemyCreatures.get(i).getName().equals(fam)) {
+                    tel++;
+                }
+            }
+        }
+
+
+        return tel;
+    }
+
     private void SetStatus(String strTxt) {
 
         txtStatus.setText(strTxt);
@@ -1985,292 +2025,6 @@ public class Interface extends javax.swing.JFrame {
 
     }
 
-    private int doBattle(Crit crit1, Crit crit2) {
-
-        BattleNum++;
-
-        /* defense CRIT1 ophalen */
-        double damage1 = crit1.getDamage() + ownExtraIthDamage;
-        double health1 = crit1.getHealth() + ownExtraIthHealth;
-        int def1 = 0;
-        /* def ophalen */
-        if (crit2.getType().equals("Nature")) {
-            def1 = crit1.getForestDefence() + ownExtraIthDefences;
-            //System.out.println("Crit2's class is 'forest'");
-        } else if (crit2.getType().equals("Diabolic")) {
-            def1 = crit1.getDeathDefence() + ownExtraIthDefences;
-            //System.out.println("Crit2's class is 'death'");
-        } else if (crit2.getType().equals("Mystic")) {
-            def1 = crit1.getAirDefence() + ownExtraIthDefences;
-            //System.out.println("Crit2's class is 'air'");
-        } else if (crit2.getType().equals("Elemental")) {
-            def1 = crit1.getEarthDefence() + ownExtraIthDefences;
-            //System.out.println("Crit2's class is 'earth'");
-        } else {
-            theLogger.warning("This Creature(2) Type is Not Found='" + crit2.getType() + "'");
-        }
-
-        /* defense CRIT2 ophalen */
-        double damage2 = crit2.getDamage() + ExtraIthDamage;
-        double health2 = crit2.getHealth() + ExtraIthHealth;
-        int def2 = 0;
-        /* def ophalen */
-        if (crit1.getType().equals("Nature")) {
-            def2 = crit2.getForestDefence() + ExtraIthDefences;
-            //System.out.println("Crit1's class is 'forest'");
-        } else if (crit1.getType().equals("Diabolic")) {
-            def2 = crit2.getDeathDefence() + ExtraIthDefences;
-            //System.out.println("Crit1's class is 'death'");
-        } else if (crit1.getType().equals("Mystic")) {
-            def2 = crit2.getAirDefence() + ExtraIthDefences;
-            //System.out.println("Crit1's class is 'air'");
-        } else if (crit1.getType().equals("Elemental")) {
-            def2 = crit2.getEarthDefence() + ExtraIthDefences;
-            //System.out.println("Crit1's class is 'earth'");
-        } else {
-            theLogger.warning("This Creature(1) Type is Not Found='" + crit2.getType() + "'");
-        }
-
-        /* CRIT1: MASS CRITS */
-        if (crit1.getItem().equals("Dust Cloud") || crit1.getItem().equals("Weak Link")) {
-            int tel = countCritFamily(1, crit1.getFamily());
-            damage1 += ((15*2) * (tel));
-        } else if (crit1.getItem().equals("Ash Cloud") || crit1.getItem().equals("Abominable Link")) {
-            int tel = countCritFamily(1, crit1.getFamily());
-            damage1 += ((18*2) * (tel));
-        } else if (crit1.getItem().equals("Sand Cloud") || crit1.getItem().equals("Frightning Link")) {
-            int tel = countCritFamily(1, crit1.getFamily());
-            damage1 += ((21*2) * (tel));
-        } else if (crit1.getItem().equals("Heat Mist") || crit1.getItem().equals("Nightmarish Link")) {
-            int tel = countCritFamily(1, crit1.getFamily());
-            damage1 += ((24*2) * (tel));
-        } else if (crit1.getItem().equals("Poison Mist") || crit1.getItem().equals("Horrifying Link")) {
-            int tel = countCritFamily(1, crit1.getFamily());
-            damage1 += ((27*2) * (tel));
-        } else if (crit1.getItem().equals("Acid Mist") || crit1.getItem().equals("Terrifying Link")) {
-            int tel = countCritFamily(1, crit1.getFamily());
-            damage1 += ((30*2) * (tel));
-        }else if(crit1.getItem().equals("Bronze Armour")|| crit1.getItem().equals("Mash")){
-            int tel = countCritFamily(1, crit1.getFamily());
-            health1 += ((30*2) * (tel));
-        }else if(crit1.getItem().equals("Silver Armour")|| crit1.getItem().equals("Stomp")){
-            int tel = countCritFamily(1, crit1.getFamily());
-            health1 += ((36*2) * (tel));
-        }else if(crit1.getItem().equals("Gold Armour")|| crit1.getItem().equals("Squash")){
-            int tel = countCritFamily(1, crit1.getFamily());
-            health1 += ((42*2) * (tel));
-        }else if(crit1.getItem().equals("Platinum Armour")|| crit1.getItem().equals("Smash")){
-            int tel = countCritFamily(1, crit1.getFamily());
-            health1 += ((48*2) * (tel));
-        }else if(crit1.getItem().equals("Titanium Armour")|| crit1.getItem().equals("Trample")){
-            int tel = countCritFamily(1, crit1.getFamily());
-            health1 += ((54*2) * (tel));
-        }else if(crit1.getItem().equals("Diamond Armour")|| crit1.getItem().equals("Crush")){
-            int tel = countCritFamily(1, crit1.getFamily());
-            health1 += ((60*2) * (tel));
-        }      
-     
-
-        /* toon welke crits het tegen elkaar opnemen */
-        gevecht.append("<i>Battle&nbsp;" + BattleNum + "</i>&nbsp;&nbsp;&nbsp;<b>" + crit1.getName() + " " + ((int) crit1.getDamage()) + "/" + ((int) crit1.getHealth()) + " " + crit1.getItem() + "</b><br>");
-        gevecht.append("- <i>vs</i> -&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>" + crit2.getName() + " " + ((int) crit2.getDamage()) + "/" + ((int) crit2.getHealth()) + " " + crit2.getItem() + "</b><br>");
-
-        /* intialisatie */
-        int schade1, schade2;
-        int teller = 50;
-
-        /* starten met het gevecht */
-        while (health1 > 0 && health2 > 0 && teller > 0) {
-
-            /* item influence during battle */
-            /* crit1: golem */
-
-            if(crit1.getItem().equals("Sacrificial Dagger") && teller == 50){
-                damage1 += 200;
-            }else if(crit1.getItem().equals("Land Slide")){
-                damage2 -= damage2*0.04;
-            }else if(crit1.getItem().equals("Flash Flood")){
-                damage2 -= damage2*0.06;
-            }else if(crit1.getItem().equals("Fire Storm")){
-                damage2 -= damage2*0.08;
-            }else if(crit1.getItem().equals("Typhoon")){
-                damage2 -= damage2*0.10;
-            }else if(crit1.getItem().equals("Sand Storm")){
-                damage2 -= damage2*0.12;
-            }else if(crit1.getItem().equals("Deep Freeze")){
-                damage2 -= damage2*0.15;
-            }else if(crit1.getItem().equals("Cry")){
-                damage1 += 50;
-            }else if(crit1.getItem().equals("Bark")){
-                damage1 += 80;
-            }else if(crit1.getItem().equals("Snarl")){
-                damage1 += 110;
-            }else if(crit1.getItem().equals("Growl")){
-                damage1 += 140;
-            }else if(crit1.getItem().equals("Bellow")){
-                damage1 += 170;
-            }else if(crit1.getItem().equals("Howl")){
-                damage1 += crit1.getDamage()*0.25;
-            }else if(crit1.getItem().equals("Mild Poison")){
-                damage1 += crit2.getHealth()*0.10;
-            }else if(crit1.getItem().equals("Strong Poison")){
-                damage1 += crit2.getHealth()*0.15;
-            }else if(crit1.getItem().equals("Deadly Poison")){
-                damage1 += crit2.getHealth()*0.20;
-            }else if(crit1.getItem().equals("Deadly Poison")){
-                damage1 += crit2.getHealth()*0.20;
-            }
-
-
-            /* limit */
-            if (damage1 < 0) {
-                damage1 = 0;
-            }
-            if (damage2 < 0) {
-                damage2 = 0;
-            }
-            if (def1 < 0) {
-                def1 = 0;
-            }
-            if (def2 < 0) {
-                def2 = 0;
-            }
-
-
-            /* bereken schade da 1 aan 2 doet */
-            double sch1 = (150 - def2) * damage1 / 100;
-            schade1 = (int) Math.round(sch1);
-
-
-            /* bereken schade da 2 aan 1 doet */
-            double sch2 = (150 - def1) * damage2 / 100;
-            schade2 = (int) Math.round(sch2);
-
-
-
-            if(crit1.getItem().equals("Soaring Wings")){
-                schade2 -= schade2*0.10;
-            }else if(crit1.getItem().equals("Cleaving Talons")){
-                schade2 -= schade2*0.15;
-            }else if(crit1.getItem().equals("Menacing Beak")){
-                schade2 -= schade2*0.20;
-            }else if(crit1.getItem().equals("Slicing Tail")){
-                schade2 -= schade2*0.25;
-            }else if(crit1.getItem().equals("Fierce Manes")){
-                schade2 -= schade2*0.30;
-            }else if(crit1.getItem().equals("Deafening Roar")){
-                schade2 -= schade2*0.35;
-            }
-            
-            /* laat crit 1 op crit2 slaan */
-            health2 = health2 - schade1;
-
-            /* laat crit2 op crit1 slaan */
-            health1 = health1 - schade2;
-
-            if(crit1.getItem().equals("Sapping Touch")){
-                health1 += schade1*0.05;
-            }else if(crit1.getItem().equals("Draining Touch")){
-                health1 += schade1*0.15;
-            }else if(crit1.getItem().equals("Vampiric Touch")){
-                health1 += schade1*0.25;
-            }else if(crit1.getItem().equals("Sanguine Touch")){
-                health1 += schade1*0.35;
-            }
-
-
-            if (health1 < 0) {
-                if(crit1.getItem().equals("Flame of Renewal")){
-                    health1 = crit1.getHealth()*0.35;
-                    damage1 = crit1.getDamage()*0.35;
-                }else if(crit1.getItem().equals("Fire of Renewal")){
-                    health1 = crit1.getHealth()*0.45;
-                    damage1 = crit1.getDamage()*0.45;
-                }else if(crit1.getItem().equals("Inferno of Renewal")){
-                    health1 = crit1.getHealth()*0.55;
-                    damage1 = crit1.getDamage()*0.55;
-                }else{
-                    health1 = 0;
-                }
-            }
-            if (health2 < 0) {
-                health2 = 0;
-            }
-
-            /* Gevecht naar scherm sturen */
-            if (ShowFullBattles) {
-                gevecht.append("Your " + crit1.getName() + " did " + ((int) schade1) + " damage -> opponent's " + crit2.getName() + " has " + ((int) health2) + " health left.<br>");
-                gevecht.append("Opponent's " + crit2.getName() + " did " + ((int) schade2) + " damage -> your " + crit1.getName() + " has " + ((int) health1) + " health left.<br>");
-            }
-
-            if(crit1.getItem().equals("SaDa") || crit1.getItem().equals("Sacrificial Dagger") && teller == 50){
-                damage1 -= 200;
-            }
-
-            teller--;
-
-        }
-
-        int succes = 0;
-        if (health1 <= 0 && health2 > 0) {
-            gevecht.append("<font color=\"red\">Your " + crit1.getName() + " got killed by your opponent's " + crit2.getName() + ".</font><br><br>");
-            DeadCrits++;
-            succes = 0;
-        } else if (health1 != 0 && health2 <= 0) {
-            gevecht.append("<font color=\"green\">Your " + crit1.getName() + " killed your opponent's " + crit2.getName() + ".</font><br><br>");
-            succes = 2;
-        } else if (health1 <= 0 && health2 <= 0) {
-            gevecht.append("<font color=\"#CC6600\">Your " + crit1.getName() + " killed your opponent's " + crit2.getName() + " but died in the process.</font><br><br>");
-            DIPCrits++;
-            succes = 1;
-        } else if (teller == 0) {
-            health1 = 0;
-            health2 = 0;
-            gevecht.append("<font color=\"red\">Your " + crit1.getName() + " got exhausted and died.</font><br><br>");
-            DeadCrits++;
-            succes = 0;
-        }
-
-        return succes;
-    }
-
-
-
-
-
-    private int countCritFamily(int wie, String fam) {
-        int tel = 0;
-        if (wie == 1) {
-            for (int i = 0; i < Math.min(CritAantal, OwnCritAantal); i++) {
-                if (owncreatures[i].getFamily().equals(fam)) {
-                    tel++;
-                }
-            }
-        } else if (wie == 2) {
-            for (int i = 0; i < Math.min(CritAantal, OwnCritAantal); i++) {
-                if (creatures[i].getFamily().equals(fam)) {
-                    tel++;
-                }
-            }
-        } else if (wie == 3) {
-            /* ENKEL VOOR FIENDS ! niet familie vgl, maar aantal crits! check namen! */
-            for (int i = 0; i < Math.min(CritAantal, OwnCritAantal); i++) {
-                if (owncreatures[i].getName().equals(fam)) {
-                    tel++;
-                }
-            }
-        } else if (wie == 4) {
-            /* ENKEL VOOR FIENDS ! niet familie vgl, maar aantal crits! check namen! */
-            for (int i = 0; i < Math.min(CritAantal, OwnCritAantal); i++) {
-                if (creatures[i].getName().equals(fam)) {
-                    tel++;
-                }
-            }
-        }
-
-
-        return tel;
-    }
 
     public boolean checkLogin(String uname, String pass) {
         return true;
@@ -2280,7 +2034,7 @@ public class Interface extends javax.swing.JFrame {
     public boolean ParseListRegExp(int listNum, BufferedReader in) {
         String str = "";
         boolean error = false;
-        String naam;
+        String name;
         try {
             while ((str = in.readLine()) != null) {
 
@@ -2322,38 +2076,38 @@ public class Interface extends javax.swing.JFrame {
                     String[] kant = p.split(str);
 
 	                    /* bewerking op eerste deel */
-	                    /* klasse eruit halen */
+	                    /* race eruit halen */
                     p = Pattern.compile("Elemental|Diabolic|Mystic|Nature");
                     m = p.matcher(kant[0]);
                     m.find();
-                    String klasse = m.group();
+                    String race = m.group();
                     int klas = 0;
-                    //System.out.println("klasse:"+klasse);
+                    //System.out.println("race:"+race);
 
-	                    /* familie eruit halen */
-                    if (klasse.equals("Mystic")) {
+	                    /* type eruit halen */
+                    if (race.equals("Mystic")) {
                         klas = 3;
                         p = Pattern.compile("Djinn|Dragon|Pegasus|Griffin|Harpy|Phoenix|Gorgon|Manticore|Valkyrie|Mystic Familiar/");
 
-                    } else if (klasse.equals("Diabolic")) {
+                    } else if (race.equals("Diabolic")) {
                         klas = 2;
                         p = Pattern.compile("Cerberus|Shinigami|Cursed Being|Demon|Shade|Skeleton|Spectre|Wight|Wraith|Diabolic Familiar/");
 
-                    } else if (klasse.equals("Elemental")) {
+                    } else if (race.equals("Elemental")) {
                         klas = 4;
                         p = Pattern.compile("Behemoth|Hrimthur|Tetramorph|Salamander|Sea Dweller|Titan|Nix|Siren|Wyrm|Elemental Familiar/");
 
-                    } else if (klasse.equals("Nature")) {
+                    } else if (race.equals("Nature")) {
                         klas = 1;
                         p = Pattern.compile("Centaur|Dryad|Pixie|Spider|Vulpes|Elf|Ogre|Troll|Nymph|Nature Familiar/");
                     }
                     //System.out.println("klas:"+klas);
                     m = p.matcher(kant[0]);
                     m.find();
-                    String familie = m.group().replaceAll("/", "");
+                    String type = m.group().replaceAll("/", "");
                     //System.out.println("fam:"+kant[0]);
 
-                    p = Pattern.compile("/" + klasse);
+                    p = Pattern.compile("/" + race);
                     String[] kantlinks = p.split(str);
 
                     System.out.println(kantlinks[0]);
@@ -2361,7 +2115,7 @@ public class Interface extends javax.swing.JFrame {
                     p = Pattern.compile("  ");
                     String[] kantlinksa = p.split(str);
 
-                    naam = kantlinksa[0].trim();
+                    name = kantlinksa[0].trim();
 	                    /*
 	                    
 	                    p = Pattern.compile("\\d{1,50}");
@@ -2370,9 +2124,9 @@ public class Interface extends javax.swing.JFrame {
 	                    
 	                    m.find();
 	                    
-	                    String naam = m.group();
+	                    String name = m.group();
 	                    
-	                    naam = naam.replaceAll("\\.","").trim();
+	                    name = name.replaceAll("\\.","").trim();
 	                    
 	                     */
 
@@ -2393,22 +2147,22 @@ public class Interface extends javax.swing.JFrame {
                     p = Pattern.compile("N\\d{1,3}");
                     m = p.matcher(kant[1]);
                     m.find();
-                    int fdef = Integer.parseInt(m.group().replaceAll("N", ""));
+                    int elementalDef = Integer.parseInt(m.group().replaceAll("N", ""));
 
                     p = Pattern.compile("/D\\d{1,3}");
                     m = p.matcher(kant[1]);
                     m.find();
-                    int ddef = Integer.parseInt(m.group().replaceAll("/D", ""));
+                    int diabolicDef = Integer.parseInt(m.group().replaceAll("/D", ""));
 
                     p = Pattern.compile("/M\\d{1,3}");
                     m = p.matcher(kant[1]);
                     m.find();
-                    int adef = Integer.parseInt(m.group().replaceAll("/M", ""));
+                    int mysticDef = Integer.parseInt(m.group().replaceAll("/M", ""));
 
                     p = Pattern.compile("/E\\d{1,3}");
                     m = p.matcher(kant[1]);
                     m.find();
-                    int edef = Integer.parseInt(m.group().replaceAll("/E", ""));
+                    int earthDef = Integer.parseInt(m.group().replaceAll("/E", ""));
 
                     p = Pattern.compile("N\\d{1,3}/D\\d{1,3}/M\\d{1,3}/E\\d{1,3}");
 
@@ -2420,7 +2174,7 @@ public class Interface extends javax.swing.JFrame {
                     int IthEff = 0;
                     if (rechts.length > 1) {
 	                        /* item gevonden */
-                        if (!familie.equals("Tempest") && !familie.equals("Seraph") && !familie.equals("Rift Dancer") && !familie.equals("Apocalypse")) {
+                        if (!type.equals("Tempest") && !type.equals("Seraph") && !type.equals("Rift Dancer") && !type.equals("Apocalypse")) {
 	                            /* als het niet over een ith gaat: zoek item + evt enchant */
 
                             p = Pattern.compile("\\*MaBe|\\*MaIm");
@@ -2453,7 +2207,7 @@ public class Interface extends javax.swing.JFrame {
                     }
 	                    /*
 	                    
-	                    System.out.print(naam+" ("+familie+"/"+klasse+" "+level+") "+damage+"/"+health+" F"+fdef+"/D"+ddef+"/A"+adef+"/E"+edef+" "+item);
+	                    System.out.print(name+" ("+type+"/"+race+" "+level+") "+damage+"/"+health+" F"+elementalDef+"/D"+diabolicDef+"/A"+mysticDef+"/E"+earthDef+" "+item);
 	                    
 	                    if(!soortenchant.equals("")){
 	                    
@@ -2472,24 +2226,24 @@ public class Interface extends javax.swing.JFrame {
 	                    /* voer nieuw creature in */
                     if (listNum == 1) {
 	                        /* eigen critlist */
-                        owncreatures[OwnCritAantal] = new Crit(naam, level, klasse, familie, damage, health, fdef, ddef, adef, edef, item, (soortenchant + enchant), IthEff);
+                        ownCreatures.add(new Crit(name, level, race, type, damage, health, elementalDef, diabolicDef, mysticDef, earthDef, item));//, (soortenchant + enchant), IthEff);
                         OwnCritAantal++;
                     } else if (listNum == 2) {
 	                        /* encounter list */
-                        creatures[CritAantal] = new Crit(naam, level, klasse, familie, damage, health, fdef, ddef, adef, edef, item, (soortenchant + enchant), IthEff);
+                        enemyCreatures.add(new Crit(name, level, race, type, damage, health, elementalDef, diabolicDef, mysticDef, earthDef, item));//, (soortenchant + enchant), IthEff);
                         CritAantal++;
                     }
 
 	                    /* controle of deze methode voldoet */
-                    if (naam.equals("") || klasse.equals("") || familie.equals("") || (damage == 0 && health == 0) || (fdef == 0 && ddef == 0 && adef == 0 && edef == 0)) {
+                    if (name.equals("") || race.equals("") || type.equals("") || (damage == 0 && health == 0) || (elementalDef == 0 && diabolicDef == 0 && mysticDef == 0 && earthDef == 0)) {
                         if (listNum == 1) {
                             SetStatus("ERROR: Your list in dB has wrong syntax! (copy/paste it again & restart this program!)");
-                            theLogger.severe("ERROR: WRONG LIST SYNTAX(1): " + "CritName='" + naam + "' Class='" + klasse + "' Race='" + familie + "' Damage='" + damage + "' Health='" + health + "' FDef='" + fdef + "' DDef='" + ddef + "' ADef='" + adef + "' EDef='" + edef + "'");
+                            theLogger.severe("ERROR: WRONG LIST SYNTAX(1): " + "CritName='" + name + "' Class='" + race + "' Race='" + type + "' Damage='" + damage + "' Health='" + health + "' FDef='" + elementalDef + "' DDef='" + diabolicDef + "' ADef='" + mysticDef + "' EDef='" + earthDef + "'");
                             theLogger.severe("ORIG LINE='" + str + "'");
                             OwnCritAantal = 0;
                         } else if (listNum == 2) {
                             SetStatus("ERROR: Wrong Input provided (copy/paste the entire encounter please!)");
-                            theLogger.severe("ERROR: WRONG ENCOUNTER SYNTAX(2): " + "CritName='" + naam + "' Class='" + klasse + "' Race='" + familie + "' Damage='" + damage + "' Health='" + health + "' FDef='" + fdef + "' DDef='" + ddef + "' ADef='" + adef + "' EDef='" + edef + "'");
+                            theLogger.severe("ERROR: WRONG ENCOUNTER SYNTAX(2): " + "CritName='" + name + "' Class='" + race + "' Race='" + type + "' Damage='" + damage + "' Health='" + health + "' FDef='" + elementalDef + "' DDef='" + diabolicDef + "' ADef='" + mysticDef + "' EDef='" + earthDef + "'");
                             theLogger.severe("ORIG LINE='" + str + "'");
                             CritAantal = 0;
                         }
@@ -2541,28 +2295,28 @@ public class Interface extends javax.swing.JFrame {
         return error;
     }
 
-    public boolean ithIsInListAndInRange(int listNum) {
+   /* public boolean ithIsInListAndInRange(int listNum) {
 
-        /* posities van de iths */
+        *//* posities van de iths *//*
         int[] ithpos = WhereAreIth(listNum);
 
         if (listNum == 1) {
-            /* eigen lijst */
+            *//* eigen lijst *//*
             int i = 0;
             int num;
             while (ithpos[i] > -1) {
-                /* ith gevonden */
+                *//* ith gevonden *//*
                 num = ithpos[i];
 
-                /* als het zich in de defendlist bevindt */
+                *//* als het zich in de defendlist bevindt *//*
                 if (num < CritAantal) {
                     //System.out.println("ITH GEVONDEN: "+owncreatures[num].getName()+" & "+owncreatures[num].getIthEff());
 
-                    if (owncreatures[num].getFamily().equals("Rift Dancer")) {
+                    if (owncreatures[num].getType().equals("Rift Dancer")) {
                         ownExtraIthHealth += owncreatures[num].getIthEff();
-                    } else if (owncreatures[num].getFamily().equals("Seraph")) {
+                    } else if (owncreatures[num].getType().equals("Seraph")) {
                         ownExtraIthDamage += owncreatures[num].getIthEff();
-                    } else if (owncreatures[num].getFamily().equals("Tempest")) {
+                    } else if (owncreatures[num].getType().equals("Tempest")) {
                         ownExtraIthDefences += owncreatures[num].getIthEff();
                     }
                 }
@@ -2571,20 +2325,20 @@ public class Interface extends javax.swing.JFrame {
             }
 
         } else if (listNum == 2) {
-            /* andere lijst */
+            *//* andere lijst *//*
             int i = 0;
             int num;
             while (ithpos[i] > -1) {
-                /* ith gevonden */
+                *//* ith gevonden *//*
                 num = ithpos[i];
 
                 //System.out.println("ENEMY ITH in range: "+ithpos[i]+creatures[num].getName()+" & "+creatures[num].getIthEff());
 
-                if (creatures[num].getFamily().equals("Rift Dancer")) {
+                if (creatures[num].getType().equals("Rift Dancer")) {
                     ExtraIthHealth += creatures[num].getIthEff();
-                } else if (creatures[num].getFamily().equals("Seraph")) {
+                } else if (creatures[num].getType().equals("Seraph")) {
                     ExtraIthDamage += creatures[num].getIthEff();
-                } else if (creatures[num].getFamily().equals("Tempest")) {
+                } else if (creatures[num].getType().equals("Tempest")) {
                     ExtraIthDefences += creatures[num].getIthEff();
                 }
 
@@ -2594,11 +2348,11 @@ public class Interface extends javax.swing.JFrame {
 
         }
         return true;
-    }
+    }*/
 
-    public int[] WhereAreIth(int listNum) {
+    /*public int[] WhereAreIth(int listNum) {
 
-        /* posities van de iths in lijst :-) */
+        *//* posities van de iths in lijst :-) *//*
         int[] ithpos = new int[5];
         ithpos[0] = -1;
         ithpos[1] = -1;
@@ -2610,20 +2364,20 @@ public class Interface extends javax.swing.JFrame {
             int tel = 0;
             if (listNum == 1) {
                 for (int i = 0; i < OwnCritAantal; i++) {
-                    if (owncreatures[i].getIthEff() > 0) {
+                    if (ownCreatures.get(i).getIthEff() > 0) {
                         ithpos[tel] = i;
                         tel++;
                     }
                 }
             } else if (listNum == 2) {
                 for (int i = 0; i < CritAantal; i++) {
-                    if (creatures[i].getIthEff() > 0) {
+                    if (enemyCreatures.get(i).getIthEff() > 0) {
                         ithpos[tel] = i;
                         tel++;
                     }
                 }
             }
-            /*
+            *//*
 
             System.out.print("\nITHPOS: ");
 
@@ -2635,13 +2389,13 @@ public class Interface extends javax.swing.JFrame {
 
             System.out.println("");
 
-             */
+             *//*
         } catch (IndexOutOfBoundsException e) {
             SetStatus("ERROR: More than 4 iths in list is impossible!");
             theLogger.severe("ERROR: TOO MANY ITHS: ArrayLength='" + ithpos.length + "' ERR:" + e.toString());
         }
         return ithpos;
-    }
+    }*/
 
     public String getClipboardContents() {
 

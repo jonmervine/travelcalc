@@ -10,7 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
@@ -24,13 +23,14 @@ import java.util.logging.SimpleFormatter;
 import java.util.prefs.Preferences;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
+
 import java.io.FileReader;
 
 /**
- *
- * @author  ORi
+ * @author ORi
  */
 public class Interface extends javax.swing.JFrame {
 
@@ -91,7 +91,9 @@ public class Interface extends javax.swing.JFrame {
     /* properties */
     Preferences prefs = Preferences.userNodeForPackage(this.getClass());
 
-    /** Creates new form Interface */
+    /**
+     * Creates new form Interface
+     */
     public Interface() {
         try {
             FileHandler fh = new FileHandler("TravCalcByORi.log", true); /* true means append */
@@ -140,9 +142,6 @@ public class Interface extends javax.swing.JFrame {
         frmResCalc.setLocationRelativeTo(null);
 
         txtUserName.requestFocus();
-
-
-
 
 
         ClipboardMonitor monitor = ClipboardMonitor.getMonitor();
@@ -1082,17 +1081,17 @@ public class Interface extends javax.swing.JFrame {
 //            }
 
             String klas = "";
-            if (ownCreatures.get(i).getRace().equals("forest")) {
+            if (ownCreatures.get(i).getMageClass().equals("forest")) {
                 klas = "<font color='#004000'>forest</font>";
-            } else if (ownCreatures.get(i).getRace().equals("air")) {
+            } else if (ownCreatures.get(i).getMageClass().equals("air")) {
                 klas = "<font color='#004080'>air</font>";
-            } else if (ownCreatures.get(i).getRace().equals("earth")) {
+            } else if (ownCreatures.get(i).getMageClass().equals("earth")) {
                 klas = "<font color='#FF8040'>earth</font>";
-            } else if (ownCreatures.get(i).getRace().equals("death")) {
+            } else if (ownCreatures.get(i).getMageClass().equals("death")) {
                 klas = "<font color='#800000'>death</font>";
             }
 
-            totalStr += "<tr><td>" + (i + 1) + ".</td><td><b>" + ownCreatures.get(i).getName() + "</b></td><td>" + ownCreatures.get(i).getType() + "/" + klas + "</td><td>" + ownCreatures.get(i).getLevel() + "</td><td><font color='#800000'>" + ownCreatures.get(i).getDamage() + "</font>/<font color='#800000'>" + ownCreatures.get(i).getHealth() + "</font></td><td>F" + ownCreatures.get(i).getElementalDef() + "/D" + ownCreatures.get(i).getDiabolicDef() + "/A" + ownCreatures.get(i).getMysticDef() + "/E" + ownCreatures.get(i).getNatureDef() + "</td><td><font color='#000080'>" + ownCreatures.get(i).getItem() + "</font>" + enchant + "</td></tr>";
+            totalStr += "<tr><td>" + (i + 1) + ".</td><td><b>" + ownCreatures.get(i).getName() + "</b></td><td>" + ownCreatures.get(i).getRace() + "/" + klas + "</td><td>" + ownCreatures.get(i).getLevel() + "</td><td><font color='#800000'>" + ownCreatures.get(i).getDamage() + "</font>/<font color='#800000'>" + ownCreatures.get(i).getHealth() + "</font></td><td>F" + ownCreatures.get(i).getElementalDef() + "/D" + ownCreatures.get(i).getDiabolicDef() + "/A" + ownCreatures.get(i).getMysticDef() + "/E" + ownCreatures.get(i).getNatureDef() + "</td><td><font color='#000080'>" + ownCreatures.get(i).getItem() + "</font>" + enchant + "</td></tr>";
         }
         totalStr += "</table></body></html>";
         critlistField.setText(totalStr);
@@ -1130,13 +1129,13 @@ public class Interface extends javax.swing.JFrame {
 //                    enchant = "*(MaBe " + ownCreatures.get(i).getMaBe() + ")";
 //                }
 
-                totalStr += ownCreatures.get(i).getName() + "  " + ownCreatures.get(i).getType() + "/" + ownCreatures.get(i).getRace() + ", passive  " + ownCreatures.get(i).getLevel() + "  " + ownCreatures.get(i).getDamage() + "/" + ownCreatures.get(i).getHealth() + "  F" + ownCreatures.get(i).getElementalDef() + "/D" + ownCreatures.get(i).getDiabolicDef() + "/A" + ownCreatures.get(i).getMysticDef() + "/E" + ownCreatures.get(i).getNatureDef() + "  " + ownCreatures.get(i).getItem() + "" + enchant + "<br>";
+                totalStr += ownCreatures.get(i).getName() + "  " + ownCreatures.get(i).getRace() + "/" + ownCreatures.get(i).getMageClass() + ", passive  " + ownCreatures.get(i).getLevel() + "  " + ownCreatures.get(i).getDamage() + "/" + ownCreatures.get(i).getHealth() + "  F" + ownCreatures.get(i).getElementalDef() + "/D" + ownCreatures.get(i).getDiabolicDef() + "/A" + ownCreatures.get(i).getMysticDef() + "/E" + ownCreatures.get(i).getNatureDef() + "  " + ownCreatures.get(i).getItem() + "" + enchant + "<br>";
             }
 
             String totaleStr = "";
             for (int i = 0; i < CritAantal; i++) {
 
-                totaleStr += enemyCreatures.get(i).getName() + "  " + enemyCreatures.get(i).getType() + "/" + enemyCreatures.get(i).getRace() + ", passive  " + enemyCreatures.get(i).getLevel() + "  " + enemyCreatures.get(i).getDamage() + "/" + enemyCreatures.get(i).getHealth() + "  F" + enemyCreatures.get(i).getElementalDef() + "/D" + enemyCreatures.get(i).getDiabolicDef() + "/A" + enemyCreatures.get(i).getMysticDef() + "/E" + enemyCreatures.get(i).getNatureDef() + "  " + "<br>";
+                totaleStr += enemyCreatures.get(i).getName() + "  " + enemyCreatures.get(i).getRace() + "/" + enemyCreatures.get(i).getMageClass() + ", passive  " + enemyCreatures.get(i).getLevel() + "  " + enemyCreatures.get(i).getDamage() + "/" + enemyCreatures.get(i).getHealth() + "  F" + enemyCreatures.get(i).getElementalDef() + "/D" + enemyCreatures.get(i).getDiabolicDef() + "/A" + enemyCreatures.get(i).getMysticDef() + "/E" + enemyCreatures.get(i).getNatureDef() + "  " + "<br>";
             }
             critlistField.setText("<font color=\"#CC6600\">[yellow]Description of the bug:[/yellow]</font><br><br>" + "<font color=\"#CC6600\">[yellow]Encounter:[/yellow]</font><br><br>" + totaleStr + "<br><br><font color=\"#CC6600\">[yellow]Your List:[/yellow]</font><br><br>" + totalStr + "<br><br>");
             critlistField.setCaretPosition(0);
@@ -1365,7 +1364,6 @@ public class Interface extends javax.swing.JFrame {
                         SetStatus(txtStatus.getText() + " Gem: " + power + " power");
                     }
                 }
-
 
 
             } else {
@@ -1810,65 +1808,17 @@ public class Interface extends javax.swing.JFrame {
         DIPCrits = 0;
         BattleNum = 0;
 
-        ownExtraIthHealth = 0;
-        ownExtraIthDamage = 0;
-        ownExtraIthDefences = 0;
+        BufferedReader in = new BufferedReader(new StringReader(AttackingString));
+        boolean parseerror = ParseListRegExp(2, in);
 
-        ExtraIthHealth = 0;
-        ExtraIthDamage = 0;
-        ExtraIthDefences = 0;
-
-        /* alle eigen crits ongebruikt flaggen */
-//        for (int i = 0; i < OwnCritAantal; i++) {
-//            ownCreatures.get(i).setUsed(false);
-//        }
-        boolean parseerror = false;
-
-        if (travOrBattle == 1) {
-            /* travel */
-            /* encounter lijst parsen */
-            BufferedReader in = new BufferedReader(new StringReader(AttackingString));
-            parseerror = ParseListRegExp(2, in);
-        } else if (travOrBattle == 2) {
-            /* battle */
-            /* eigen lijst parsen */
-            /*BufferedReader in1 = new BufferedReader(new StringReader(BattleInputFieldOwn.getText()));
-            
-            parseerror = ParseListRegExp(1,in1);
-            
-             */
-            /* encounter lijst parsen */
-            /*
-            
-            BufferedReader in2 = new BufferedReader(new StringReader(BattleInputFieldOpponent.getText()));
-            
-            parseerror = ParseListRegExp(2,in2);
-            
-             */
-        }
-
-
-        /* als er geen parse-error opgetreden is */
         if (!parseerror) {
 
-            if (travOrBattle == 1) {
-                /* clear outputveld */
-                if (CritAantal > 0) {
-                    SetStatus("");
-                    txtStatus.setBackground(Color.white);
-                    txtOutput.setText("");
-                }
-            } else if (travOrBattle == 2) {
-                /*
-                
-                BattleCalcStatus.setText("");
-                
-                BattleCalcStatus.setBackground(Color.white);
-                
-                BattleCalcField.setText("");
-                
-                 **/
+            if (CritAantal > 0) {
+                SetStatus("");
+                txtStatus.setBackground(Color.white);
+                txtOutput.setText("");
             }
+
             sb.setLength(0);
 
             if (OwnCritAantal == 0) {
@@ -1889,26 +1839,15 @@ public class Interface extends javax.swing.JFrame {
                 SetStatus("You cannot defend all creatures! (last calc: " + datenewformat + ")");
                 theLogger.info("INFO: Encounter Size > List Size: Cannot Defend This!");
             } else {
-                /* indien wel genoeg, calc ze */
                 int i = 0;
-                int j = 0;
-                int succes = 0;
 
-//                ithIsInListAndInRange(1);
-//                ithIsInListAndInRange(2);
-
-
-                //System.out.println(ownExtraIthHealth);
-                //System.out.println(ExtraIthHealth);
-
-                /* probeer auto defend */
                 while (i < CritAantal && i < OwnCritAantal & !parseerror) {
                     BattleNum++;
                     CombatResult result = battle.doBattle(ownCreatures.get(i), enemyCreatures.get(i),
-                            BattleNum, sb, ShowFullBattles, countCritFamily(1, ownCreatures.get(i).getType()));
+                            BattleNum, sb, ShowFullBattles, ownCreatures, enemyCreatures);
 
-                    switch(result) {
-                        case DEAD :
+                    switch (result) {
+                        case DEAD:
                             DeadCrits++;
                             break;
                         case DIP:
@@ -1920,19 +1859,7 @@ public class Interface extends javax.swing.JFrame {
                     }
                     i++;
                 }
-                /* controleer of alle
-                
-                for(int a=0;a<Math.min(CritAantal,OwnCritAantal);a++){
-                
-                sb+=a+" -> "+nummers[a][0]+"("+nummers[a][1]+"), ";
-                
-                }
-                
-                
-                
-                
-                
-                /* alle gevechten gedaan */
+
                 txtOutput.setText(sb.toString());
                 String status = "";
 
@@ -1973,55 +1900,9 @@ public class Interface extends javax.swing.JFrame {
 
     }
 
-    private int countCritFamily(int wie, String fam) {
-        int tel = 0;
-        if (wie == 1) {
-            for (int i = 0; i < Math.min(CritAantal, OwnCritAantal); i++) {
-                if (ownCreatures.get(i).getType().equals(fam)) {
-                    tel++;
-                }
-            }
-        } else if (wie == 2) {
-            for (int i = 0; i < Math.min(CritAantal, OwnCritAantal); i++) {
-                if (enemyCreatures.get(i).getType().equals(fam)) {
-                    tel++;
-                }
-            }
-        } else if (wie == 3) {
-            /* ENKEL VOOR FIENDS ! niet familie vgl, maar aantal crits! check namen! */
-            for (int i = 0; i < Math.min(CritAantal, OwnCritAantal); i++) {
-                if (ownCreatures.get(i).getName().equals(fam)) {
-                    tel++;
-                }
-            }
-        } else if (wie == 4) {
-            /* ENKEL VOOR FIENDS ! niet familie vgl, maar aantal crits! check namen! */
-            for (int i = 0; i < Math.min(CritAantal, OwnCritAantal); i++) {
-                if (enemyCreatures.get(i).getName().equals(fam)) {
-                    tel++;
-                }
-            }
-        }
-
-
-        return tel;
-    }
-
     private void SetStatus(String strTxt) {
 
         txtStatus.setText(strTxt);
-
-        /* start - admin version only */
-
-//        try {
-//            BufferedWriter out = new BufferedWriter(new FileWriter("c:\\trigger\\travelcalcoutput.txt"));
-//            out.write(strTxt);
-//            out.close();
-//        } catch (Exception ex) {
-//            // ignore the error
-//        }
-         
-        /* end - admin version only */
 
     }
 
@@ -2041,7 +1922,7 @@ public class Interface extends javax.swing.JFrame {
                 Pattern patCheckEnd = Pattern.compile("Please copy");
                 Matcher matCheckEnd = patCheckEnd.matcher(str);
 
-                if(matCheckEnd.find()){
+                if (matCheckEnd.find()) {
                     break;
                 }
 
@@ -2076,7 +1957,7 @@ public class Interface extends javax.swing.JFrame {
                     String[] kant = p.split(str);
 
 	                    /* bewerking op eerste deel */
-	                    /* race eruit halen */
+                        /* race eruit halen */
                     p = Pattern.compile("Elemental|Diabolic|Mystic|Nature");
                     m = p.matcher(kant[0]);
                     m.find();
@@ -2129,7 +2010,6 @@ public class Interface extends javax.swing.JFrame {
 	                    name = name.replaceAll("\\.","").trim();
 	                    
 	                     */
-
 
 
                     //System.out.println(kantlinks[0]);
@@ -2294,108 +2174,6 @@ public class Interface extends javax.swing.JFrame {
 
         return error;
     }
-
-   /* public boolean ithIsInListAndInRange(int listNum) {
-
-        *//* posities van de iths *//*
-        int[] ithpos = WhereAreIth(listNum);
-
-        if (listNum == 1) {
-            *//* eigen lijst *//*
-            int i = 0;
-            int num;
-            while (ithpos[i] > -1) {
-                *//* ith gevonden *//*
-                num = ithpos[i];
-
-                *//* als het zich in de defendlist bevindt *//*
-                if (num < CritAantal) {
-                    //System.out.println("ITH GEVONDEN: "+owncreatures[num].getName()+" & "+owncreatures[num].getIthEff());
-
-                    if (owncreatures[num].getType().equals("Rift Dancer")) {
-                        ownExtraIthHealth += owncreatures[num].getIthEff();
-                    } else if (owncreatures[num].getType().equals("Seraph")) {
-                        ownExtraIthDamage += owncreatures[num].getIthEff();
-                    } else if (owncreatures[num].getType().equals("Tempest")) {
-                        ownExtraIthDefences += owncreatures[num].getIthEff();
-                    }
-                }
-
-                i++;
-            }
-
-        } else if (listNum == 2) {
-            *//* andere lijst *//*
-            int i = 0;
-            int num;
-            while (ithpos[i] > -1) {
-                *//* ith gevonden *//*
-                num = ithpos[i];
-
-                //System.out.println("ENEMY ITH in range: "+ithpos[i]+creatures[num].getName()+" & "+creatures[num].getIthEff());
-
-                if (creatures[num].getType().equals("Rift Dancer")) {
-                    ExtraIthHealth += creatures[num].getIthEff();
-                } else if (creatures[num].getType().equals("Seraph")) {
-                    ExtraIthDamage += creatures[num].getIthEff();
-                } else if (creatures[num].getType().equals("Tempest")) {
-                    ExtraIthDefences += creatures[num].getIthEff();
-                }
-
-
-                i++;
-            }
-
-        }
-        return true;
-    }*/
-
-    /*public int[] WhereAreIth(int listNum) {
-
-        *//* posities van de iths in lijst :-) *//*
-        int[] ithpos = new int[5];
-        ithpos[0] = -1;
-        ithpos[1] = -1;
-        ithpos[2] = -1;
-        ithpos[3] = -1;
-        ithpos[4] = -1;
-
-        try {
-            int tel = 0;
-            if (listNum == 1) {
-                for (int i = 0; i < OwnCritAantal; i++) {
-                    if (ownCreatures.get(i).getIthEff() > 0) {
-                        ithpos[tel] = i;
-                        tel++;
-                    }
-                }
-            } else if (listNum == 2) {
-                for (int i = 0; i < CritAantal; i++) {
-                    if (enemyCreatures.get(i).getIthEff() > 0) {
-                        ithpos[tel] = i;
-                        tel++;
-                    }
-                }
-            }
-            *//*
-
-            System.out.print("\nITHPOS: ");
-
-            for(int i=0;i<4;i++){
-
-            System.out.print(ithpos[i]+", ");
-
-            }
-
-            System.out.println("");
-
-             *//*
-        } catch (IndexOutOfBoundsException e) {
-            SetStatus("ERROR: More than 4 iths in list is impossible!");
-            theLogger.severe("ERROR: TOO MANY ITHS: ArrayLength='" + ithpos.length + "' ERR:" + e.toString());
-        }
-        return ithpos;
-    }*/
 
     public String getClipboardContents() {
 
@@ -2593,9 +2371,7 @@ public class Interface extends javax.swing.JFrame {
     }
 
     /**
-
      * @param args the command line arguments
-
      */
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -2605,7 +2381,8 @@ public class Interface extends javax.swing.JFrame {
             }
         });
     }
-    // Variables declaration - do not modify                     
+
+    // Variables declaration - do not modify
     private javax.swing.JLabel BrimLabel;
     private javax.swing.JPanel BrimPanel2;
     private javax.swing.JPanel BrimPanel3;

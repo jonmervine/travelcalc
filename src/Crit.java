@@ -5,8 +5,7 @@
  *
  */
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.logging.Logger;
 
 /**
  *
@@ -14,10 +13,12 @@ import java.util.regex.Pattern;
  */
 public class Crit {
 
+    private static Logger theLogger = Logger.getLogger(Crit.class.getName());
+
     private String name = "";
     private String level = "";
-    private String race = "";
-    private String type = "";
+    private String mageClass = "";
+    private CritRaces race;
     private int damage=0;
     private int health=0;
     private int mysticDef =0;
@@ -26,15 +27,16 @@ public class Crit {
     private int elementalDef =0;
     private String itemtype ="";
 
+    private boolean hasItem = false;
+
     /** Creates a new instance of Crit */
     public Crit() {
 
     }
-    public Crit(String name, String level, String race, String type, int damage, int health, int elemental,int diabolic, int mystic, int nature, String item) {
+    public Crit(String name, String level, String mageClass, String race, int damage, int health, int elemental,int diabolic, int mystic, int nature, String item) {
         this.name = name;
         this.level = level;
-        this.race = race;
-        this.type = type;
+        this.mageClass = mageClass;
         this.damage = damage;
         this.health = health;
         this.mysticDef =mystic;
@@ -42,6 +44,17 @@ public class Crit {
         this.diabolicDef =diabolic;
         this.elementalDef =elemental;
         this.itemtype=item;
+
+        try {
+            this.race = CritRaces.fromString(race);
+        } catch (IllegalArgumentException ex) {
+            theLogger.severe("Crit race of " + race + " is not known in the CritRaces class!");
+            this.race = CritRaces.OTHER;
+        }
+
+        if (item != null && item.length() > 0) {
+            hasItem = true;
+        }
 
 //        if(enchant.length()>0){
 //            Pattern p = Pattern.compile("MaBe|MaIm");
@@ -84,14 +97,13 @@ public class Crit {
     public String getName(){
         return name;
     }
-    public String getRace(){
-        return race;
+    public String getMageClass(){
+        return mageClass;
     }
-    public String getType(){
-        return type;
+    public CritRaces getRace(){
+        return race;
     }
     public String getItem(){
         return itemtype;
     }
-
 }

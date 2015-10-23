@@ -5,13 +5,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
@@ -27,18 +21,13 @@ import java.util.regex.Pattern;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
-import java.io.FileReader;
-
 /**
  * @author ORi
  */
 public class Interface extends javax.swing.JFrame {
 
-    public static final String NATURE_CRITS = "Pixie|Centaur|Nature Spirit|Vulpes|Dryad|Troll|Ogre|Elf|Nature Familiar|Nymph/";
-    public static final String ELEMENTAL_CRITS = "Salamander|Behemoth|Sea Dweller|Titan|Hrimthur|Wyrm|Siren|Nix|Elemental Familiar|Tetramorph/";
-    public static final String DIABOLIC_CRITS = "Skeleton|Cursed Being|Shade|Demon|Cerberus|Spectre|Wight|Wraith|Diabolic Familiar|Shinigami/";
-    public static final String MYSTIC_CRITS = "Griffin|Djinn|Harpy|Manticore|Phoenix|Basilisk|Valkyrie|Dragon|Mystic Familiar|Pegasus/";
     Battle battle = new Battle();
+    ParseList parseList = new ParseList();
 
     String AppVersion = "4.0.0";
 
@@ -48,7 +37,6 @@ public class Interface extends javax.swing.JFrame {
     int CritAantal = 0;
     int OwnCritAantal = 0;
     /* debug features NORMAL: true DEBUGMODE: false */
-    boolean TravStatChoice = true;
     int DeadCrits = 0;
     int DIPCrits = 0;
     StringBuilder sb = new StringBuilder("");
@@ -309,7 +297,7 @@ public class Interface extends javax.swing.JFrame {
             }
         });
 
-        lblWelcome.setText("Have your list in c:\\list.txt and press login");
+        lblWelcome.setText("Press login (it does nothing 2lazy2 remove)");
         lblUsername.setFont(new java.awt.Font("Tahoma", 0, 12));
         lblUsername.setText("Username :");
         lblUsername.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -351,12 +339,12 @@ public class Interface extends javax.swing.JFrame {
 
         frmCreatureListUpdate.setAlwaysOnTop(true);
 
-        critlistField.setContentType("text/html");
-        critlistField.setEditable(false);
+        critlistField.setContentType("text/plain");
+        critlistField.setEditable(true);
         pnlCreatureList.setViewportView(critlistField);
 
-        btnResyncList.setText("Resynchronise list (press this button after you've updated your list on cq2.stormy.be)");
-        btnResyncList.setActionCommand("Resynchronise List (Press this button after you've updated your list on cq2.stormy.be)");
+        btnResyncList.setText("Resynchronise list");
+        btnResyncList.setActionCommand("Resynchronise List");
         btnResyncList.addActionListener(new java.awt.event.ActionListener() {
 
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -973,9 +961,13 @@ public class Interface extends javax.swing.JFrame {
     private void btnResyncListActionPerformed(java.awt.event.ActionEvent evt) {
 // TODO add your handling code here:
         OwnCritAantal = 0;
-        DoLogin();
-        GenerateListView();
-
+        BufferedReader in = new BufferedReader(new StringReader(critlistField.getText()));
+        ParseList.ParsedList parsedList = parseList.parseList(in, txtStatus);
+        if (!parsedList.hasErrors()) {
+            OwnCritAantal = parsedList.getCritCount();
+            ownCreatures = parsedList.getCritList();
+            GenerateListView();
+        }
     }
 
     private void frmLoginWindowClosed(java.awt.event.WindowEvent evt) {
@@ -1052,33 +1044,27 @@ public class Interface extends javax.swing.JFrame {
 
     private void GenerateListView() {
         frmCreatureListUpdate.setTitle("Your creature list as parsed from database.");
-        String totalStr = "<html><body><table>";
+        StringBuilder totalStr = new StringBuilder();
         for (int i = 0; i < OwnCritAantal; i++) {
 
-            String enchant = "";
-//            if (owncreatures[i].getMaIm().length() > 0) {
-//                enchant = "* (<font color='#FF8000'>MaIm</font> " + owncreatures[i].getMaIm() + ")";
-//            } else if (owncreatures[i].getMaBe().length() > 0) {
-//                enchant = "* (<font color='#800000'>MaBe</font> " + owncreatures[i].getMaBe() + ")";
-//            }
-
-            String klas = "";
-            if (ownCreatures.get(i).getMageClass().equals("forest")) {
-                klas = "<font color='#004000'>forest</font>";
-            } else if (ownCreatures.get(i).getMageClass().equals("air")) {
-                klas = "<font color='#004080'>air</font>";
-            } else if (ownCreatures.get(i).getMageClass().equals("earth")) {
-                klas = "<font color='#FF8040'>earth</font>";
-            } else if (ownCreatures.get(i).getMageClass().equals("death")) {
-                klas = "<font color='#800000'>death</font>";
-            }
-
-            totalStr += "<tr><td>" + (i + 1) + ".</td><td><b>" + ownCreatures.get(i).getName() + "</b></td><td>" + ownCreatures.get(i).getRaceFormat() + "/" + klas + "</td><td>" + ownCreatures.get(i).getLevel() + "</td><td><font color='#800000'>" + ownCreatures.get(i).getDamage() + "</font>/<font color='#800000'>" + ownCreatures.get(i).getHealth() + "</font></td><td>F" + ownCreatures.get(i).getElementalDef() + "/D" + ownCreatures.get(i).getDiabolicDef() + "/A" + ownCreatures.get(i).getMysticDef() + "/E" + ownCreatures.get(i).getNatureDef() + "</td><td><font color='#000080'>" + ownCreatures.get(i).getItem() + "</font>" + enchant + "</td></tr>";
+            totalStr.append(ownCreatures.get(i).getName())
+                    .append("\t")
+                    .append(ownCreatures.get(i).getRaceFormat())
+                    .append("/")
+                    .append(ownCreatures.get(i).getMageClass())
+                    .append(", ")
+                    .append(ownCreatures.get(i).getLevel())
+                    .append("\t")
+                    .append(ownCreatures.get(i).getDamage())
+                    .append("/").append(ownCreatures.get(i).getHealth())
+                    .append("\tN").append(ownCreatures.get(i).getNatureDef())
+                    .append("/D").append(ownCreatures.get(i).getDiabolicDef())
+                    .append("/M").append(ownCreatures.get(i).getMysticDef())
+                    .append("/E").append(ownCreatures.get(i).getElementalDef())
+                    .append("\t").append(ownCreatures.get(i).getItem()).append("\n");
         }
-        totalStr += "</table></body></html>";
-        critlistField.setText(totalStr);
+        critlistField.setText(totalStr.toString());
         critlistField.setCaretPosition(0);
-        critlistField.setEditable(false);
         frmCreatureListUpdate.pack();
         frmCreatureListUpdate.setVisible(true);
     }
@@ -1095,7 +1081,7 @@ public class Interface extends javax.swing.JFrame {
     }
 
     private void reportBugButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        if (loggedIn) {
+        if (false) {
             btnResyncList.setEnabled(false);
             btnResyncList.setVisible(false);
 
@@ -1356,8 +1342,6 @@ public class Interface extends javax.swing.JFrame {
         } else {
             SetStatus(NoAcces);
         }
-
-
     }
 
     private void ResEssFieldActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1559,108 +1543,55 @@ public class Interface extends javax.swing.JFrame {
         }
     }
 
-    private void DoLogin() {
-
-        if (checkLogin(username, userpass)) {
-
-            try {
-                btnLogin.setEnabled(false);
-                String encusername = URLEncoder.encode(username, "UTF-8");
-                String encpass = URLEncoder.encode(userpass, "UTF-8");
-                URL sim = new URL("http://cq2.stormy.be/calcget/check.php?user=" + encusername + "&pass=" + encpass + "&action=listing");
-
-
-                BufferedReader in = new BufferedReader(new FileReader("C:\\list.txt"));
-
-                /* create travstat */
-                try {
-                    if (TravStatChoice && StatId == 0) {
-                        URL urlstat = new URL("http://cq2.stormy.be/calcget/travstat.php?user=" + encusername + "&pass=" + encpass + "&action=startsession");
-
-
-                        BufferedReader statread = new BufferedReader(new FileReader("C:\\list.txt"));
-                        StatId = Integer.parseInt(statread.readLine().trim());
-                    }
-
-                    System.out.println(StatId);
-
-                } catch (Exception e) {
-                    /* program can continue: soft error! */
-                    theLogger.warning("WARNING: LOGIN-STAT error: " + e.toString());
-                }
-
-                btnLogin.setEnabled(true);
-
-                if (!ParseListRegExp(1, in)) {
-                    /* probeer reguliere expressies */
-                    SetStatus("Login succesfull.");
-                    frmLogin.setEnabled(false);
-                    frmLogin.setVisible(false);
-
-                    loggedIn = true;
-
-                    /* set username property */
-                    prefs.put("_TRAVCALC_USER_NAME_", username);
-
-                    /* get & perform visual properties */
-                    String showontop = prefs.get("_TRAVCALC_" + username + "_ONTOP_", "");
-                    String showsmallwindow = prefs.get("_TRAVCALC_" + username + "_SMALLWINDOW_", "");
-                    String showfullbattles = prefs.get("_TRAVCALC_" + username + "_FULLBATTLES_", "");
-                    String showcliplistener = prefs.get("_TRAVCALC_" + username + "_CLIPLISTENER_", "");
-                    String showrescalc = prefs.get("_TRAVCALC_" + username + "_RESCALC_", "");
-                    String strSound = prefs.get("_TRAVCALC_" + username + "_SOUND_", "");
-
-                    if (showontop.equals("1")) {
-                        ToggleOnTop = true;
-                        this.setAlwaysOnTop(true);
-                        ItemSetAlwaysOnTop.setState(true);
-                    }
-                    if (showsmallwindow.equals("1")) {
-                        makeWindowSmall();
-                    }
-                    if (showfullbattles.equals("1")) {
-                        ShowFullBattles = true;
-                        ItemShowFullBattles.setState(true);
-                    }
-                    if (showcliplistener.equals("0")) {
-                        ToggleClipListener = false;
-                        AutoCalcFromClipboard = false;
-                        ItemAutoCalcFromClipboard.setState(false);
-                    }
-                    if (strSound.equals("0")) {
-                        ItemSoundToggle.setSelected(false);
-                    }
-
-                    if (showrescalc.equals("0")) {
-                        HideResCalc();
-                    }
-
-                } else {
-                    txtLoginStatus.setText("Cannot parse your list from database!");
-                }
-
-            } catch (IOException e) {
-                txtLoginStatus.setText("ERROR: Wrong Input provided (copy/paste the entire encounter please!)");
-                theLogger.severe("ERROR: LOGIN/LIST ERROR: " + e.toString());
-            } catch (Exception e) {
-                txtLoginStatus.setText("ERROR: General Login Error");
-                theLogger.severe("ERROR: General Login Error: " + e.toString());
-            }
-
-        } else {
-            txtLoginStatus.setText("Username/Password not correct!");
-            theLogger.info("INFO: USERNAME/PASS NOT CORRECT: UserName='" + username + "' UserPass='***ENCRYPTED***'");
-            txtUserPassword.requestFocus();
-            txtUserPassword.selectAll();
-        }
-    }
-
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
 
         /* fetch user data */
         username = txtUserName.getText();
         userpass = getMD5Hash(new String(txtUserPassword.getPassword()));
-        DoLogin();
+
+
+         /* probeer reguliere expressies */
+        SetStatus("Login succesfull.");
+        frmLogin.setEnabled(false);
+        frmLogin.setVisible(false);
+
+        loggedIn = true;
+
+                    /* set username property */
+        prefs.put("_TRAVCALC_USER_NAME_", username);
+
+                    /* get & perform visual properties */
+        String showontop = prefs.get("_TRAVCALC_" + username + "_ONTOP_", "");
+        String showsmallwindow = prefs.get("_TRAVCALC_" + username + "_SMALLWINDOW_", "");
+        String showfullbattles = prefs.get("_TRAVCALC_" + username + "_FULLBATTLES_", "");
+        String showcliplistener = prefs.get("_TRAVCALC_" + username + "_CLIPLISTENER_", "");
+        String showrescalc = prefs.get("_TRAVCALC_" + username + "_RESCALC_", "");
+        String strSound = prefs.get("_TRAVCALC_" + username + "_SOUND_", "");
+
+        if (showontop.equals("1")) {
+            ToggleOnTop = true;
+            this.setAlwaysOnTop(true);
+            ItemSetAlwaysOnTop.setState(true);
+        }
+        if (showsmallwindow.equals("1")) {
+            makeWindowSmall();
+        }
+        if (showfullbattles.equals("1")) {
+            ShowFullBattles = true;
+            ItemShowFullBattles.setState(true);
+        }
+        if (showcliplistener.equals("0")) {
+            ToggleClipListener = false;
+            AutoCalcFromClipboard = false;
+            ItemAutoCalcFromClipboard.setState(false);
+        }
+        if (strSound.equals("0")) {
+            ItemSoundToggle.setSelected(false);
+        }
+
+        if (showrescalc.equals("0")) {
+            HideResCalc();
+        }
 
     }
 
@@ -1791,9 +1722,11 @@ public class Interface extends javax.swing.JFrame {
         BattleNum = 0;
 
         BufferedReader in = new BufferedReader(new StringReader(AttackingString));
-        boolean parseerror = ParseListRegExp(2, in);
+        ParseList.ParsedList parsedList = parseList.parseList(in, txtStatus);
 
-        if (!parseerror) {
+        if (!parsedList.hasErrors()) {
+            CritAantal = parsedList.getCritCount();
+            enemyCreatures = parsedList.getCritList();
 
             if (CritAantal > 0) {
                 SetStatus("");
@@ -1823,7 +1756,7 @@ public class Interface extends javax.swing.JFrame {
             } else {
                 int i = 0;
 
-                while (i < CritAantal && i < OwnCritAantal & !parseerror) {
+                while (i < CritAantal && i < OwnCritAantal & !parsedList.hasErrors()) {
                     BattleNum++;
                     CombatResult result = battle.doBattle(ownCreatures.get(i), enemyCreatures.get(i),
                             BattleNum, sb, ShowFullBattles, ownCreatures, enemyCreatures, false);
@@ -1889,279 +1822,6 @@ public class Interface extends javax.swing.JFrame {
     }
 
 
-    public boolean checkLogin(String uname, String pass) {
-        return true;
-
-    }
-
-    public boolean ParseListRegExp(int listNum, BufferedReader in) {
-        String str = "";
-        boolean error = false;
-        String name;
-        try {
-            while ((str = in.readLine()) != null) {
-
-                Pattern patCheckEnd = Pattern.compile("Please copy");
-                Matcher matCheckEnd = patCheckEnd.matcher(str);
-
-                if (matCheckEnd.find()) {
-                    break;
-                }
-
-                Pattern p0 = Pattern.compile("N\\d{1,3}/D\\d{1,3}/M\\d{1,3}/E\\d{1,3}");
-                Matcher m0 = p0.matcher(str);
-
-                str = str.replaceAll("\t", "  ");
-                str = str.replaceAll("&#37", "  ");
-                str = str.replaceAll(";", "  ");
-                str = str.replaceAll(" \\(", "");
-                str = str.replaceAll("\\)", "");
-                str = str.replaceAll("sacrifice, ", "");
-                str = str.replaceAll("sacrifice", "");
-                str = str.replaceAll("kingdom defense", "");
-                str = str.replaceAll("defense", "");
-                str = str.replaceAll("curse", "");
-                str = str.replaceAll("cast ", "");
-                str = str.replaceAll("morph ", "");
-                str = str.replaceAll("     ", "  ");
-                str = str.trim();
-
-                //System.out.println(str);
-
-                if (str.length() > 0 && m0.find()) {
-
-	                    /* splitsen op level */
-                    Pattern p = Pattern.compile("L\\d{1,3}");
-                    Matcher m = p.matcher(str);
-                    m.find();
-                    String level = m.group();
-                    String[] kant = p.split(str);
-
-	                    /* bewerking op eerste deel */
-                        /* mageClass eruit halen */
-                    p = Pattern.compile("Elemental|Diabolic|Mystic|Nature");
-                    m = p.matcher(kant[0]);
-                    m.find();
-                    String mageClass = m.group();
-                    int klas = 0;
-                    //System.out.println("mageClass:"+mageClass);
-
-	                    /* race eruit halen */
-                    if (mageClass.equals("Mystic")) {
-                        klas = 3;
-                        p = Pattern.compile(MYSTIC_CRITS);
-
-                    } else if (mageClass.equals("Diabolic")) {
-                        klas = 2;
-                        p = Pattern.compile(DIABOLIC_CRITS);
-
-                    } else if (mageClass.equals("Elemental")) {
-                        klas = 4;
-                        p = Pattern.compile(ELEMENTAL_CRITS);
-
-                    } else if (mageClass.equals("Nature")) {
-                        klas = 1;
-                        p = Pattern.compile(NATURE_CRITS);
-                    }
-                    //System.out.println("klas:"+klas);
-                    m = p.matcher(kant[0]);
-                    m.find();
-                    String race = m.group().replaceAll("/", "");
-                    //System.out.println("fam:"+kant[0]);
-
-                    p = Pattern.compile("/" + mageClass);
-                    String[] kantlinks = p.split(str);
-
-                    System.out.println(kantlinks[0]);
-
-                    p = Pattern.compile("  ");
-                    String[] kantlinksa = p.split(str);
-
-                    name = kantlinksa[0].trim();
-	                    /*
-
-	                    p = Pattern.compile("\\d{1,50}");
-
-	                    m = p.matcher(kantlinks[0]);
-
-	                    m.find();
-
-	                    String name = m.group();
-
-	                    name = name.replaceAll("\\.","").trim();
-
-	                     */
-
-
-                    //System.out.println(kantlinks[0]);
-
-	                    /* bewerking op tweede deel */
-	                    /* damage/health eruit halen */
-                    p = Pattern.compile("\\d{1,5}/\\d{1,5}");
-                    m = p.matcher(kant[1]);
-                    m.find();
-                    String[] damhea = m.group().split("/");
-                    int damage = Integer.parseInt(damhea[0]);
-                    int health = Integer.parseInt(damhea[1]);
-
-	                    /* defences eruit halen */
-                    p = Pattern.compile("N\\d{1,3}");
-                    m = p.matcher(kant[1]);
-                    m.find();
-                    int natureDef = Integer.parseInt(m.group().replaceAll("N", ""));
-
-                    p = Pattern.compile("/D\\d{1,3}");
-                    m = p.matcher(kant[1]);
-                    m.find();
-                    int diabolicDef = Integer.parseInt(m.group().replaceAll("/D", ""));
-
-                    p = Pattern.compile("/M\\d{1,3}");
-                    m = p.matcher(kant[1]);
-                    m.find();
-                    int mysticDef = Integer.parseInt(m.group().replaceAll("/M", ""));
-
-                    p = Pattern.compile("/E\\d{1,3}");
-                    m = p.matcher(kant[1]);
-                    m.find();
-                    int elementalDef = Integer.parseInt(m.group().replaceAll("/E", ""));
-
-                    p = Pattern.compile("N\\d{1,3}/D\\d{1,3}/M\\d{1,3}/E\\d{1,3}");
-
-                    String[] rechts = p.split(kant[1]);
-
-                    String item = "";
-                    String enchant = "";
-                    String soortenchant = "";
-                    int IthEff = 0;
-                    if (rechts.length > 1) {
-	                        /* item gevonden */
-                        if (!race.equals("Tempest") && !race.equals("Seraph") && !race.equals("Rift Dancer") && !race.equals("Apocalypse")) {
-	                            /* als het niet over een ith gaat: zoek item + evt enchant */
-
-                            p = Pattern.compile("\\*MaBe|\\*MaIm");
-                            String[] rechtskant = p.split(rechts[1]);
-                            item = rechtskant[0].trim();
-
-                            if (rechtskant.length > 1) {
-	                                /* enchant gevonden */
-                                m = p.matcher(kant[1]);
-                                m.find();
-
-                                soortenchant = m.group().replaceAll("\\*", "");
-                                enchant = rechtskant[1].trim();
-
-                            }
-                        } else {
-	                            /* indien wel een ith */
-                            p = Pattern.compile("\\+");
-                            String[] rechtskant = p.split(rechts[1]);
-                            item = rechtskant[0].trim();
-
-                            if (rechtskant.length > 1) {
-                                p = Pattern.compile("\\d{1,5}");
-                                m = p.matcher(rechtskant[1]);
-                                m.find();
-                                IthEff = Integer.parseInt(m.group().trim());
-                            }
-                            //System.out.print("ITH("+IthEff+"): ");
-                        }
-                    }
-
-                    if (item.startsWith("Blank")) {
-                        item = "";
-                    }
-                    if (item.contains("*")) {
-                        item = item.substring(0, item.indexOf('*'));
-                    }
-                        /*
-
-	                    System.out.print(name+" ("+race+"/"+mageClass+" "+level+") "+damage+"/"+health+" F"+elementalDef+"/D"+diabolicDef+"/A"+mysticDef+"/E"+natureDef+" "+item);
-
-	                    if(!soortenchant.equals("")){
-
-	                    System.out.print("* ("+soortenchant+" "+enchant+")");
-
-	                    } else if(IthEff!=0){
-
-	                    System.out.print(" (+"+IthEff+" health)");
-
-	                    }
-
-	                    System.out.println("");
-
-	                     */
-
-	                    /* voer nieuw creature in */
-                    if (listNum == 1) {
-	                        /* eigen critlist */
-                        ownCreatures.add(new Crit(name, level, mageClass, race, damage, health, elementalDef, diabolicDef, mysticDef, natureDef, item));//, (soortenchant + enchant), IthEff);
-                        OwnCritAantal++;
-                    } else if (listNum == 2) {
-	                        /* encounter list */
-                        enemyCreatures.add(new Crit(name, level, mageClass, race, damage, health, elementalDef, diabolicDef, mysticDef, natureDef, item));//, (soortenchant + enchant), IthEff);
-                        CritAantal++;
-                    }
-
-	                    /* controle of deze methode voldoet */
-                    if (name.equals("") || mageClass.equals("") || race.equals("") || (damage == 0 && health == 0) || (elementalDef == 0 && diabolicDef == 0 && mysticDef == 0 && natureDef == 0)) {
-                        if (listNum == 1) {
-                            SetStatus("ERROR: Your list in dB has wrong syntax! (copy/paste it again & restart this program!)");
-                            theLogger.severe("ERROR: WRONG LIST SYNTAX(1): " + "CritName='" + name + "' Class='" + mageClass + "' Race='" + race + "' Damage='" + damage + "' Health='" + health + "' FDef='" + elementalDef + "' DDef='" + diabolicDef + "' ADef='" + mysticDef + "' EDef='" + natureDef + "'");
-                            theLogger.severe("ORIG LINE='" + str + "'");
-                            OwnCritAantal = 0;
-                        } else if (listNum == 2) {
-                            SetStatus("ERROR: Wrong Input provided (copy/paste the entire encounter please!)");
-                            theLogger.severe("ERROR: WRONG ENCOUNTER SYNTAX(2): " + "CritName='" + name + "' Class='" + mageClass + "' Race='" + race + "' Damage='" + damage + "' Health='" + health + "' FDef='" + elementalDef + "' DDef='" + diabolicDef + "' ADef='" + mysticDef + "' EDef='" + natureDef + "'");
-                            theLogger.severe("ORIG LINE='" + str + "'");
-                            CritAantal = 0;
-                        }
-
-                        error = true;
-                    }
-
-                }
-            }
-            in.close();
-
-        } catch (IllegalStateException e) {
-            if (listNum == 1) {
-                SetStatus("ERROR: Your list in dB has wrong syntax! (copy/paste it again & restart this program!)");
-                theLogger.severe("ERROR: LIST SYNTAX(1): " + e.toString());
-                theLogger.severe("ORIG LINE='" + str + "'");
-                OwnCritAantal = 0;
-            } else if (listNum == 2) {
-                SetStatus("ERROR: Wrong Input provided (copy/paste the entire encounter please!)");
-                theLogger.severe("ERROR: ENCOUNTER SYNTAX(2): " + e.toString());
-                CritAantal = 0;
-            }
-            error = true;
-
-        } catch (ArrayIndexOutOfBoundsException e) {
-
-            if (listNum == 1) {
-                SetStatus("ERROR: Your list in dB has wrong syntax! (copy/paste it again & restart this program!)");
-                theLogger.severe("ERROR: LIST SYNTAX(1) OUT OF BOUNDS: " + e.toString());
-                OwnCritAantal = 0;
-            } else if (listNum == 2) {
-                SetStatus("ERROR: Wrong Input provided (copy/paste the entire encounter please!)");
-                theLogger.severe("ERROR: ENCOUNTER SYNTAX(2) OUT OF BOUNDS: " + e.toString());
-                CritAantal = 0;
-            }
-            error = true;
-
-        } catch (IOException e) {
-            SetStatus("ERROR: Wrong Input provided (copy/paste the entire encounter please!)");
-            theLogger.severe("ERROR: GENERAL SYNTAX ERROR: " + e.toString());
-            error = true;
-            if (listNum == 1) {
-                OwnCritAantal = 0;
-            } else if (listNum == 2) {
-                CritAantal = 0;
-            }
-        }
-
-        return error;
-    }
 
     public String getClipboardContents() {
 

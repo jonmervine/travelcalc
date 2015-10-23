@@ -34,6 +34,10 @@ import java.io.FileReader;
  */
 public class Interface extends javax.swing.JFrame {
 
+    public static final String NATURE_CRITS = "Pixie|Centaur|Nature Spirit|Vulpes|Dryad|Troll|Ogre|Elf|Nature Familiar|Nymph/";
+    public static final String ELEMENTAL_CRITS = "Salamander|Behemoth|Sea Dweller|Titan|Hrimthur|Wyrm|Siren|Nix|Elemental Familiar|Tetramorph/";
+    public static final String DIABOLIC_CRITS = "Skeleton|Cursed Being|Shade|Demon|Cerberus|Spectre|Wight|Wraith|Diabolic Familiar|Shinigami/";
+    public static final String MYSTIC_CRITS = "Griffin|Djinn|Harpy|Manticore|Phoenix|Basilisk|Valkyrie|Dragon|Mystic Familiar|Pegasus/";
     Battle battle = new Battle();
 
     String AppVersion = "4.0.0";
@@ -88,7 +92,6 @@ public class Interface extends javax.swing.JFrame {
     int GranPrev = 0;
     int BattleNum = 1;
     boolean AutoCalcFromClipboard = true;
-    /* properties */
     Preferences prefs = Preferences.userNodeForPackage(this.getClass());
 
     /**
@@ -104,12 +107,7 @@ public class Interface extends javax.swing.JFrame {
             theLogger.severe("ERROR: " + ex.toString());
         } catch (IOException ex) {
             theLogger.severe("ERROR: " + ex.toString());
-        } /* true means append */
-
-        /* start - admin version only */
-        // System.setProperty("socksProxyHost", "127.0.0.1");
-        // System.setProperty("socksProxyPort", "3080");
-        /* end - admin version only */
+        }
 
         initComponents();
         pack();
@@ -163,25 +161,9 @@ public class Interface extends javax.swing.JFrame {
             btnLogin.setEnabled(false);
         }
 
-
-        /* rescalc verbergen */
-        //ResPanel.setVisible(false);
-
-        /* properties ophalen */
-
-        //prefs.put("_TRAVCALC_USER_NAME_", "test");
-        String naampje = prefs.get("_TRAVCALC_USER_NAME_", "");
-        username = naampje;
-
-        if (!naampje.equals("")) {
-            txtUserName.setText(naampje);
-            txtUserPassword.requestFocus();
-        }
         pack();
 
-
     }
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
 
     private void initComponents() {
 
@@ -1091,7 +1073,7 @@ public class Interface extends javax.swing.JFrame {
                 klas = "<font color='#800000'>death</font>";
             }
 
-            totalStr += "<tr><td>" + (i + 1) + ".</td><td><b>" + ownCreatures.get(i).getName() + "</b></td><td>" + ownCreatures.get(i).getRace() + "/" + klas + "</td><td>" + ownCreatures.get(i).getLevel() + "</td><td><font color='#800000'>" + ownCreatures.get(i).getDamage() + "</font>/<font color='#800000'>" + ownCreatures.get(i).getHealth() + "</font></td><td>F" + ownCreatures.get(i).getElementalDef() + "/D" + ownCreatures.get(i).getDiabolicDef() + "/A" + ownCreatures.get(i).getMysticDef() + "/E" + ownCreatures.get(i).getNatureDef() + "</td><td><font color='#000080'>" + ownCreatures.get(i).getItem() + "</font>" + enchant + "</td></tr>";
+            totalStr += "<tr><td>" + (i + 1) + ".</td><td><b>" + ownCreatures.get(i).getName() + "</b></td><td>" + ownCreatures.get(i).getRaceFormat() + "/" + klas + "</td><td>" + ownCreatures.get(i).getLevel() + "</td><td><font color='#800000'>" + ownCreatures.get(i).getDamage() + "</font>/<font color='#800000'>" + ownCreatures.get(i).getHealth() + "</font></td><td>F" + ownCreatures.get(i).getElementalDef() + "/D" + ownCreatures.get(i).getDiabolicDef() + "/A" + ownCreatures.get(i).getMysticDef() + "/E" + ownCreatures.get(i).getNatureDef() + "</td><td><font color='#000080'>" + ownCreatures.get(i).getItem() + "</font>" + enchant + "</td></tr>";
         }
         totalStr += "</table></body></html>";
         critlistField.setText(totalStr);
@@ -1129,13 +1111,13 @@ public class Interface extends javax.swing.JFrame {
 //                    enchant = "*(MaBe " + ownCreatures.get(i).getMaBe() + ")";
 //                }
 
-                totalStr += ownCreatures.get(i).getName() + "  " + ownCreatures.get(i).getRace() + "/" + ownCreatures.get(i).getMageClass() + ", passive  " + ownCreatures.get(i).getLevel() + "  " + ownCreatures.get(i).getDamage() + "/" + ownCreatures.get(i).getHealth() + "  F" + ownCreatures.get(i).getElementalDef() + "/D" + ownCreatures.get(i).getDiabolicDef() + "/A" + ownCreatures.get(i).getMysticDef() + "/E" + ownCreatures.get(i).getNatureDef() + "  " + ownCreatures.get(i).getItem() + "" + enchant + "<br>";
+                totalStr += ownCreatures.get(i).getName() + "  " + ownCreatures.get(i).getRaceFormat() + "/" + ownCreatures.get(i).getMageClass() + ", passive  " + ownCreatures.get(i).getLevel() + "  " + ownCreatures.get(i).getDamage() + "/" + ownCreatures.get(i).getHealth() + "  F" + ownCreatures.get(i).getElementalDef() + "/D" + ownCreatures.get(i).getDiabolicDef() + "/A" + ownCreatures.get(i).getMysticDef() + "/E" + ownCreatures.get(i).getNatureDef() + "  " + ownCreatures.get(i).getItem() + "" + enchant + "<br>";
             }
 
             String totaleStr = "";
             for (int i = 0; i < CritAantal; i++) {
 
-                totaleStr += enemyCreatures.get(i).getName() + "  " + enemyCreatures.get(i).getRace() + "/" + enemyCreatures.get(i).getMageClass() + ", passive  " + enemyCreatures.get(i).getLevel() + "  " + enemyCreatures.get(i).getDamage() + "/" + enemyCreatures.get(i).getHealth() + "  F" + enemyCreatures.get(i).getElementalDef() + "/D" + enemyCreatures.get(i).getDiabolicDef() + "/A" + enemyCreatures.get(i).getMysticDef() + "/E" + enemyCreatures.get(i).getNatureDef() + "  " + "<br>";
+                totaleStr += enemyCreatures.get(i).getName() + "  " + enemyCreatures.get(i).getRaceFormat() + "/" + enemyCreatures.get(i).getMageClass() + ", passive  " + enemyCreatures.get(i).getLevel() + "  " + enemyCreatures.get(i).getDamage() + "/" + enemyCreatures.get(i).getHealth() + "  F" + enemyCreatures.get(i).getElementalDef() + "/D" + enemyCreatures.get(i).getDiabolicDef() + "/A" + enemyCreatures.get(i).getMysticDef() + "/E" + enemyCreatures.get(i).getNatureDef() + "  " + "<br>";
             }
             critlistField.setText("<font color=\"#CC6600\">[yellow]Description of the bug:[/yellow]</font><br><br>" + "<font color=\"#CC6600\">[yellow]Encounter:[/yellow]</font><br><br>" + totaleStr + "<br><br><font color=\"#CC6600\">[yellow]Your List:[/yellow]</font><br><br>" + totalStr + "<br><br>");
             critlistField.setCaretPosition(0);
@@ -1844,7 +1826,7 @@ public class Interface extends javax.swing.JFrame {
                 while (i < CritAantal && i < OwnCritAantal & !parseerror) {
                     BattleNum++;
                     CombatResult result = battle.doBattle(ownCreatures.get(i), enemyCreatures.get(i),
-                            BattleNum, sb, ShowFullBattles, ownCreatures, enemyCreatures);
+                            BattleNum, sb, ShowFullBattles, ownCreatures, enemyCreatures, false);
 
                     switch (result) {
                         case DEAD:
@@ -1932,7 +1914,6 @@ public class Interface extends javax.swing.JFrame {
                 str = str.replaceAll("\t", "  ");
                 str = str.replaceAll("&#37", "  ");
                 str = str.replaceAll(";", "  ");
-                //str = str.replaceAll(" \\(N\\)","");
                 str = str.replaceAll(" \\(", "");
                 str = str.replaceAll("\\)", "");
                 str = str.replaceAll("sacrifice, ", "");
@@ -1957,38 +1938,38 @@ public class Interface extends javax.swing.JFrame {
                     String[] kant = p.split(str);
 
 	                    /* bewerking op eerste deel */
-                        /* race eruit halen */
+                        /* mageClass eruit halen */
                     p = Pattern.compile("Elemental|Diabolic|Mystic|Nature");
                     m = p.matcher(kant[0]);
                     m.find();
-                    String race = m.group();
+                    String mageClass = m.group();
                     int klas = 0;
-                    //System.out.println("race:"+race);
+                    //System.out.println("mageClass:"+mageClass);
 
-	                    /* type eruit halen */
-                    if (race.equals("Mystic")) {
+	                    /* race eruit halen */
+                    if (mageClass.equals("Mystic")) {
                         klas = 3;
-                        p = Pattern.compile("Djinn|Dragon|Pegasus|Griffin|Harpy|Phoenix|Gorgon|Manticore|Valkyrie|Mystic Familiar/");
+                        p = Pattern.compile(MYSTIC_CRITS);
 
-                    } else if (race.equals("Diabolic")) {
+                    } else if (mageClass.equals("Diabolic")) {
                         klas = 2;
-                        p = Pattern.compile("Cerberus|Shinigami|Cursed Being|Demon|Shade|Skeleton|Spectre|Wight|Wraith|Diabolic Familiar/");
+                        p = Pattern.compile(DIABOLIC_CRITS);
 
-                    } else if (race.equals("Elemental")) {
+                    } else if (mageClass.equals("Elemental")) {
                         klas = 4;
-                        p = Pattern.compile("Behemoth|Hrimthur|Tetramorph|Salamander|Sea Dweller|Titan|Nix|Siren|Wyrm|Elemental Familiar/");
+                        p = Pattern.compile(ELEMENTAL_CRITS);
 
-                    } else if (race.equals("Nature")) {
+                    } else if (mageClass.equals("Nature")) {
                         klas = 1;
-                        p = Pattern.compile("Centaur|Dryad|Pixie|Spider|Vulpes|Elf|Ogre|Troll|Nymph|Nature Familiar/");
+                        p = Pattern.compile(NATURE_CRITS);
                     }
                     //System.out.println("klas:"+klas);
                     m = p.matcher(kant[0]);
                     m.find();
-                    String type = m.group().replaceAll("/", "");
+                    String race = m.group().replaceAll("/", "");
                     //System.out.println("fam:"+kant[0]);
 
-                    p = Pattern.compile("/" + race);
+                    p = Pattern.compile("/" + mageClass);
                     String[] kantlinks = p.split(str);
 
                     System.out.println(kantlinks[0]);
@@ -1998,17 +1979,17 @@ public class Interface extends javax.swing.JFrame {
 
                     name = kantlinksa[0].trim();
 	                    /*
-	                    
+
 	                    p = Pattern.compile("\\d{1,50}");
-	                    
+
 	                    m = p.matcher(kantlinks[0]);
-	                    
+
 	                    m.find();
-	                    
+
 	                    String name = m.group();
-	                    
+
 	                    name = name.replaceAll("\\.","").trim();
-	                    
+
 	                     */
 
 
@@ -2027,7 +2008,7 @@ public class Interface extends javax.swing.JFrame {
                     p = Pattern.compile("N\\d{1,3}");
                     m = p.matcher(kant[1]);
                     m.find();
-                    int elementalDef = Integer.parseInt(m.group().replaceAll("N", ""));
+                    int natureDef = Integer.parseInt(m.group().replaceAll("N", ""));
 
                     p = Pattern.compile("/D\\d{1,3}");
                     m = p.matcher(kant[1]);
@@ -2042,7 +2023,7 @@ public class Interface extends javax.swing.JFrame {
                     p = Pattern.compile("/E\\d{1,3}");
                     m = p.matcher(kant[1]);
                     m.find();
-                    int earthDef = Integer.parseInt(m.group().replaceAll("/E", ""));
+                    int elementalDef = Integer.parseInt(m.group().replaceAll("/E", ""));
 
                     p = Pattern.compile("N\\d{1,3}/D\\d{1,3}/M\\d{1,3}/E\\d{1,3}");
 
@@ -2054,7 +2035,7 @@ public class Interface extends javax.swing.JFrame {
                     int IthEff = 0;
                     if (rechts.length > 1) {
 	                        /* item gevonden */
-                        if (!type.equals("Tempest") && !type.equals("Seraph") && !type.equals("Rift Dancer") && !type.equals("Apocalypse")) {
+                        if (!race.equals("Tempest") && !race.equals("Seraph") && !race.equals("Rift Dancer") && !race.equals("Apocalypse")) {
 	                            /* als het niet over een ith gaat: zoek item + evt enchant */
 
                             p = Pattern.compile("\\*MaBe|\\*MaIm");
@@ -2085,45 +2066,52 @@ public class Interface extends javax.swing.JFrame {
                             //System.out.print("ITH("+IthEff+"): ");
                         }
                     }
-	                    /*
-	                    
-	                    System.out.print(name+" ("+type+"/"+race+" "+level+") "+damage+"/"+health+" F"+elementalDef+"/D"+diabolicDef+"/A"+mysticDef+"/E"+earthDef+" "+item);
-	                    
+
+                    if (item.startsWith("Blank")) {
+                        item = "";
+                    }
+                    if (item.contains("*")) {
+                        item = item.substring(0, item.indexOf('*'));
+                    }
+                        /*
+
+	                    System.out.print(name+" ("+race+"/"+mageClass+" "+level+") "+damage+"/"+health+" F"+elementalDef+"/D"+diabolicDef+"/A"+mysticDef+"/E"+natureDef+" "+item);
+
 	                    if(!soortenchant.equals("")){
-	                    
+
 	                    System.out.print("* ("+soortenchant+" "+enchant+")");
-	                    
+
 	                    } else if(IthEff!=0){
-	                    
+
 	                    System.out.print(" (+"+IthEff+" health)");
-	                    
+
 	                    }
-	                    
+
 	                    System.out.println("");
-	                    
+
 	                     */
 
 	                    /* voer nieuw creature in */
                     if (listNum == 1) {
 	                        /* eigen critlist */
-                        ownCreatures.add(new Crit(name, level, race, type, damage, health, elementalDef, diabolicDef, mysticDef, earthDef, item));//, (soortenchant + enchant), IthEff);
+                        ownCreatures.add(new Crit(name, level, mageClass, race, damage, health, elementalDef, diabolicDef, mysticDef, natureDef, item));//, (soortenchant + enchant), IthEff);
                         OwnCritAantal++;
                     } else if (listNum == 2) {
 	                        /* encounter list */
-                        enemyCreatures.add(new Crit(name, level, race, type, damage, health, elementalDef, diabolicDef, mysticDef, earthDef, item));//, (soortenchant + enchant), IthEff);
+                        enemyCreatures.add(new Crit(name, level, mageClass, race, damage, health, elementalDef, diabolicDef, mysticDef, natureDef, item));//, (soortenchant + enchant), IthEff);
                         CritAantal++;
                     }
 
 	                    /* controle of deze methode voldoet */
-                    if (name.equals("") || race.equals("") || type.equals("") || (damage == 0 && health == 0) || (elementalDef == 0 && diabolicDef == 0 && mysticDef == 0 && earthDef == 0)) {
+                    if (name.equals("") || mageClass.equals("") || race.equals("") || (damage == 0 && health == 0) || (elementalDef == 0 && diabolicDef == 0 && mysticDef == 0 && natureDef == 0)) {
                         if (listNum == 1) {
                             SetStatus("ERROR: Your list in dB has wrong syntax! (copy/paste it again & restart this program!)");
-                            theLogger.severe("ERROR: WRONG LIST SYNTAX(1): " + "CritName='" + name + "' Class='" + race + "' Race='" + type + "' Damage='" + damage + "' Health='" + health + "' FDef='" + elementalDef + "' DDef='" + diabolicDef + "' ADef='" + mysticDef + "' EDef='" + earthDef + "'");
+                            theLogger.severe("ERROR: WRONG LIST SYNTAX(1): " + "CritName='" + name + "' Class='" + mageClass + "' Race='" + race + "' Damage='" + damage + "' Health='" + health + "' FDef='" + elementalDef + "' DDef='" + diabolicDef + "' ADef='" + mysticDef + "' EDef='" + natureDef + "'");
                             theLogger.severe("ORIG LINE='" + str + "'");
                             OwnCritAantal = 0;
                         } else if (listNum == 2) {
                             SetStatus("ERROR: Wrong Input provided (copy/paste the entire encounter please!)");
-                            theLogger.severe("ERROR: WRONG ENCOUNTER SYNTAX(2): " + "CritName='" + name + "' Class='" + race + "' Race='" + type + "' Damage='" + damage + "' Health='" + health + "' FDef='" + elementalDef + "' DDef='" + diabolicDef + "' ADef='" + mysticDef + "' EDef='" + earthDef + "'");
+                            theLogger.severe("ERROR: WRONG ENCOUNTER SYNTAX(2): " + "CritName='" + name + "' Class='" + mageClass + "' Race='" + race + "' Damage='" + damage + "' Health='" + health + "' FDef='" + elementalDef + "' DDef='" + diabolicDef + "' ADef='" + mysticDef + "' EDef='" + natureDef + "'");
                             theLogger.severe("ORIG LINE='" + str + "'");
                             CritAantal = 0;
                         }
@@ -2503,5 +2491,5 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JTextField txtStatus;
     private javax.swing.JTextField txtUserName;
     private javax.swing.JPasswordField txtUserPassword;
-    // End of variables declaration                   
+    // End of variables declaration
 }

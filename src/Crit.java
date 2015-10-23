@@ -103,6 +103,7 @@ public class Crit {
     public CritRaces getRace(){
         return race;
     }
+    public String getRaceFormat() { return race.race; }
     public String getItem(){
         return itemtype;
     }

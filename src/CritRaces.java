@@ -45,7 +45,7 @@ public enum CritRaces {
     TETRAMORPH("Tetramorph"),
     OTHER("OTHER");
 
-    private String race;
+    protected String race;
 
     private CritRaces(String race) {
         this.race = race;

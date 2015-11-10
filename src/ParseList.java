@@ -12,8 +12,6 @@ import java.util.regex.Pattern;
  */
 public class ParseList {
 
-    private static Logger theLogger = Logger.getLogger(ParseList.class.getName());
-
     public static final String NATURE_CRITS = "Pixie|Centaur|Nature Spirit|Vulpes|Dryad|Troll|Ogre|Elf|Nature Familiar|Nymph/";
     public static final String ELEMENTAL_CRITS = "Salamander|Behemoth|Sea Dweller|Titan|Hrimthur|Wyrm|Siren|Nix|Elemental Familiar|Tetramorph/";
     public static final String DIABOLIC_CRITS = "Skeleton|Cursed Being|Shade|Demon|Cerberus|Spectre|Wight|Wraith|Diabolic Familiar|Shinigami/";
@@ -121,40 +119,20 @@ public class ParseList {
                     String[] rechts = p.split(kant[1]);
 
                     String item = "";
-                    String enchant = "";
-                    String soortenchant = "";
-                    int IthEff = 0;
+                    String enchantType = "";
+                    String enchantAgainst = "";
+
                     if (rechts.length > 1) {
-                            /* item gevonden */
-                        if (!race.equals("Tempest") && !race.equals("Seraph") && !race.equals("Rift Dancer") && !race.equals("Apocalypse")) {
-	                            /* als het niet over een ith gaat: zoek item + evt enchant */
+                        p = Pattern.compile("\\*Immunity|\\*Rage|\\*Tranquility");
+                        String[] rechtskant = p.split(rechts[1]);
+                        item = rechtskant[0].trim();
 
-                            p = Pattern.compile("\\*MaBe|\\*MaIm");
-                            String[] rechtskant = p.split(rechts[1]);
-                            item = rechtskant[0].trim();
+                        if (rechtskant.length > 1) {
+                            m = p.matcher(kant[1]);
+                            m.find();
 
-                            if (rechtskant.length > 1) {
-	                                /* enchant gevonden */
-                                m = p.matcher(kant[1]);
-                                m.find();
-
-                                soortenchant = m.group().replaceAll("\\*", "");
-                                enchant = rechtskant[1].trim();
-
-                            }
-                        } else {
-	                            /* indien wel een ith */
-                            p = Pattern.compile("\\+");
-                            String[] rechtskant = p.split(rechts[1]);
-                            item = rechtskant[0].trim();
-
-                            if (rechtskant.length > 1) {
-                                p = Pattern.compile("\\d{1,5}");
-                                m = p.matcher(rechtskant[1]);
-                                m.find();
-                                IthEff = Integer.parseInt(m.group().trim());
-                            }
-                            //System.out.print("ITH("+IthEff+"): ");
+                            enchantType = m.group().replaceAll("\\*", "");
+                            enchantAgainst = rechtskant[1].trim();
                         }
                     }
 
@@ -164,17 +142,15 @@ public class ParseList {
                     if (item.contains("*")) {
                         item = item.substring(0, item.indexOf('*'));
                     }
+                    if (enchantAgainst.startsWith("vs ")) {
+                        enchantAgainst= enchantAgainst.replace("vs ", "");
+                    }
 
-	                        /* eigen critlist */
-                        critList.add(new Crit(name, level, mageClass, race, damage, health, elementalDef, diabolicDef, mysticDef, natureDef, item));//, (soortenchant + enchant), IthEff);
-                        critCount++;
-
-	                    /* controle of deze methode voldoet */
+                    critList.add(new Crit(name, level, mageClass, race, damage, health, elementalDef, diabolicDef, mysticDef, natureDef, item, enchantType, enchantAgainst));
+                    critCount++;
                     if (name.equals("") || mageClass.equals("") || race.equals("") || (damage == 0 && health == 0) || (elementalDef == 0 && diabolicDef == 0 && mysticDef == 0 && natureDef == 0)) {
-                            status.setText("ERROR: Your list in dB has wrong syntax! (copy/paste it again & restart this program!)");
-                            theLogger.severe("ERROR: WRONG LIST SYNTAX(1): " + "CritName='" + name + "' Class='" + mageClass + "' Race='" + race + "' Damage='" + damage + "' Health='" + health + "' FDef='" + elementalDef + "' DDef='" + diabolicDef + "' ADef='" + mysticDef + "' EDef='" + natureDef + "'");
-                            theLogger.severe("ORIG LINE='" + str + "'");
-                            critCount = 0;
+                        status.setText("ERROR: Your list in dB has wrong syntax! (copy/paste it again & restart this program!)");
+                        critCount = 0;
                     }
 
                 }
@@ -182,21 +158,17 @@ public class ParseList {
             in.close();
 
         } catch (IllegalStateException e) {
-                status.setText("ERROR: Your list in dB has wrong syntax! (copy/paste it again & restart this program!)");
-                theLogger.severe("ERROR: LIST SYNTAX(1): " + e.toString());
-                theLogger.severe("ORIG LINE='" + str + "'");
-                critCount = 0;
+            status.setText("ERROR: Your list in dB has wrong syntax! (copy/paste it again & restart this program!)");
+            critCount = 0;
             error = true;
 
         } catch (ArrayIndexOutOfBoundsException e) {
-                status.setText("ERROR: Your list in dB has wrong syntax! (copy/paste it again & restart this program!)");
-                theLogger.severe("ERROR: LIST SYNTAX(1) OUT OF BOUNDS: " + e.toString());
-                critCount = 0;
+            status.setText("ERROR: Your list in dB has wrong syntax! (copy/paste it again & restart this program!)");
+            critCount = 0;
             error = true;
 
         } catch (IOException e) {
             status.setText("ERROR: Wrong Input provided (copy/paste the entire encounter please!)");
-            theLogger.severe("ERROR: GENERAL SYNTAX ERROR: " + e.toString());
             error = true;
             critCount = 0;
         }
@@ -224,7 +196,7 @@ public class ParseList {
         }
 
         public boolean hasErrors() {
-         return error;
+            return error;
         }
     }
 }

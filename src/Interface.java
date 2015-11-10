@@ -18,6 +18,8 @@ import java.util.prefs.Preferences;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.jdesktop.layout.GroupLayout;
+import org.jdesktop.layout.LayoutStyle;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
@@ -36,17 +38,10 @@ public class Interface extends javax.swing.JFrame {
 
     int CritAantal = 0;
     int OwnCritAantal = 0;
-    /* debug features NORMAL: true DEBUGMODE: false */
+
     int DeadCrits = 0;
     int DIPCrits = 0;
     StringBuilder sb = new StringBuilder("");
-    int ownExtraIthHealth = 0;
-    int ownExtraIthDamage = 0;
-    int ownExtraIthDefences = 0;
-    int StatId = 0;
-    int ExtraIthHealth = 0;
-    int ExtraIthDamage = 0;
-    int ExtraIthDefences = 0;
     String AttackingString = "";
     String username = "";
     String userpass = "";
@@ -62,7 +57,6 @@ public class Interface extends javax.swing.JFrame {
     String okSound = "/travelcalc/ok.wav";
     String warningSound = "/travelcalc/warning.wav";
     String failureSound = "/travelcalc/failure.wav";
-    private static Logger theLogger = Logger.getLogger(Interface.class.getName());
     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
     Integer Brim = 0;
     Integer Crys = 0;
@@ -86,17 +80,6 @@ public class Interface extends javax.swing.JFrame {
      * Creates new form Interface
      */
     public Interface() {
-        try {
-            FileHandler fh = new FileHandler("TravCalcByORi.log", true); /* true means append */
-            fh.setFormatter(new SimpleFormatter());
-            theLogger.addHandler(fh);
-
-        } catch (SecurityException ex) {
-            theLogger.severe("ERROR: " + ex.toString());
-        } catch (IOException ex) {
-            theLogger.severe("ERROR: " + ex.toString());
-        }
-
         initComponents();
         pack();
         setVisible(true);
@@ -328,12 +311,12 @@ public class Interface extends javax.swing.JFrame {
             }
         });
 
-        org.jdesktop.layout.GroupLayout frmLoginLayout = new org.jdesktop.layout.GroupLayout(frmLogin.getContentPane());
+        GroupLayout frmLoginLayout = new GroupLayout(frmLogin.getContentPane());
         frmLogin.getContentPane().setLayout(frmLoginLayout);
         frmLoginLayout.setHorizontalGroup(
-                frmLoginLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(frmLoginLayout.createSequentialGroup().add(frmLoginLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(frmLoginLayout.createSequentialGroup().addContainerGap().add(frmLoginLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(lblUsername).add(lblPassword)).add(13, 13, 13).add(frmLoginLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false).add(txtUserName, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE).add(txtUserPassword, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE).add(btnLogin, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).add(42, 42, 42)).add(frmLoginLayout.createSequentialGroup().addContainerGap().add(lblWelcome)).add(frmLoginLayout.createSequentialGroup().add(53, 53, 53).add(frmLoginLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(lblWelcome3).add(lblWelcome2).add(lblWelcome4))).add(frmLoginLayout.createSequentialGroup().addContainerGap().add(txtLoginStatus, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))).addContainerGap()));
+                frmLoginLayout.createParallelGroup(GroupLayout.LEADING).add(frmLoginLayout.createSequentialGroup().add(frmLoginLayout.createParallelGroup(GroupLayout.LEADING).add(frmLoginLayout.createSequentialGroup().addContainerGap().add(frmLoginLayout.createParallelGroup(GroupLayout.LEADING).add(lblUsername).add(lblPassword)).add(13, 13, 13).add(frmLoginLayout.createParallelGroup(GroupLayout.LEADING, false).add(txtUserName, GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE).add(txtUserPassword, GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE).add(btnLogin, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).add(42, 42, 42)).add(frmLoginLayout.createSequentialGroup().addContainerGap().add(lblWelcome)).add(frmLoginLayout.createSequentialGroup().add(53, 53, 53).add(frmLoginLayout.createParallelGroup(GroupLayout.LEADING).add(lblWelcome3).add(lblWelcome2).add(lblWelcome4))).add(frmLoginLayout.createSequentialGroup().addContainerGap().add(txtLoginStatus, GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))).addContainerGap()));
         frmLoginLayout.setVerticalGroup(
-                frmLoginLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(frmLoginLayout.createSequentialGroup().addContainerGap().add(lblWelcome).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(lblWelcome2).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(lblWelcome3).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(lblWelcome4).add(25, 25, 25).add(frmLoginLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(lblUsername).add(txtUserName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(frmLoginLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(lblPassword).add(txtUserPassword, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(btnLogin).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(txtLoginStatus, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 29, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                frmLoginLayout.createParallelGroup(GroupLayout.LEADING).add(frmLoginLayout.createSequentialGroup().addContainerGap().add(lblWelcome).addPreferredGap(LayoutStyle.RELATED).add(lblWelcome2).addPreferredGap(LayoutStyle.RELATED).add(lblWelcome3).addPreferredGap(LayoutStyle.RELATED).add(lblWelcome4).add(25, 25, 25).add(frmLoginLayout.createParallelGroup(GroupLayout.BASELINE).add(lblUsername).add(txtUserName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)).addPreferredGap(LayoutStyle.RELATED).add(frmLoginLayout.createParallelGroup(GroupLayout.BASELINE).add(lblPassword).add(txtUserPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)).addPreferredGap(LayoutStyle.RELATED).add(btnLogin).addPreferredGap(LayoutStyle.RELATED).add(txtLoginStatus, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE).addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         frmLogin.getAccessibleContext().setAccessibleParent(this);
 
@@ -352,12 +335,12 @@ public class Interface extends javax.swing.JFrame {
             }
         });
 
-        org.jdesktop.layout.GroupLayout frmCreatureListUpdateLayout = new org.jdesktop.layout.GroupLayout(frmCreatureListUpdate.getContentPane());
+        GroupLayout frmCreatureListUpdateLayout = new GroupLayout(frmCreatureListUpdate.getContentPane());
         frmCreatureListUpdate.getContentPane().setLayout(frmCreatureListUpdateLayout);
         frmCreatureListUpdateLayout.setHorizontalGroup(
-                frmCreatureListUpdateLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(pnlCreatureList, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE).add(btnResyncList, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE));
+                frmCreatureListUpdateLayout.createParallelGroup(GroupLayout.LEADING).add(pnlCreatureList, GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE).add(btnResyncList, GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE));
         frmCreatureListUpdateLayout.setVerticalGroup(
-                frmCreatureListUpdateLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(org.jdesktop.layout.GroupLayout.TRAILING, frmCreatureListUpdateLayout.createSequentialGroup().add(btnResyncList, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 31, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(pnlCreatureList, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)));
+                frmCreatureListUpdateLayout.createParallelGroup(GroupLayout.LEADING).add(GroupLayout.TRAILING, frmCreatureListUpdateLayout.createSequentialGroup().add(btnResyncList, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.RELATED).add(pnlCreatureList, GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)));
 
         frmCreatureListUpdate.getAccessibleContext().setAccessibleName("Creature Listing");
         frmCreatureListUpdate.getAccessibleContext().setAccessibleParent(this);
@@ -368,12 +351,12 @@ public class Interface extends javax.swing.JFrame {
 
         lblInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/travelcalc/splash.png"))); // NOI18N
 
-        org.jdesktop.layout.GroupLayout frmMoreInfoLayout = new org.jdesktop.layout.GroupLayout(frmMoreInfo.getContentPane());
+        GroupLayout frmMoreInfoLayout = new GroupLayout(frmMoreInfo.getContentPane());
         frmMoreInfo.getContentPane().setLayout(frmMoreInfoLayout);
         frmMoreInfoLayout.setHorizontalGroup(
-                frmMoreInfoLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(lblInfo));
+                frmMoreInfoLayout.createParallelGroup(GroupLayout.LEADING).add(lblInfo));
         frmMoreInfoLayout.setVerticalGroup(
-                frmMoreInfoLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(lblInfo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 294, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE));
+                frmMoreInfoLayout.createParallelGroup(GroupLayout.LEADING).add(lblInfo, GroupLayout.PREFERRED_SIZE, 294, GroupLayout.PREFERRED_SIZE));
 
         frmMoreInfo.getAccessibleContext().setAccessibleParent(this);
 
@@ -435,19 +418,19 @@ public class Interface extends javax.swing.JFrame {
         lblBrimRes2.setText("0");
         BrimPanel5.add(lblBrimRes2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 0, 50, -1));
 
-        org.jdesktop.layout.GroupLayout jPanel9Layout = new org.jdesktop.layout.GroupLayout(jPanel9);
+        GroupLayout jPanel9Layout = new GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
-                jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel9Layout.createSequentialGroup().addContainerGap().add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING).add(org.jdesktop.layout.GroupLayout.LEADING, CrysPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, BrimPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, EssPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, GranPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addContainerGap()));
+                jPanel9Layout.createParallelGroup(GroupLayout.LEADING).add(GroupLayout.TRAILING, jPanel9Layout.createSequentialGroup().addContainerGap().add(jPanel9Layout.createParallelGroup(GroupLayout.TRAILING).add(GroupLayout.LEADING, CrysPanel5, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(GroupLayout.LEADING, BrimPanel5, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(GroupLayout.LEADING, EssPanel5, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(GroupLayout.LEADING, GranPanel5, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addContainerGap()));
         jPanel9Layout.setVerticalGroup(
-                jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel9Layout.createSequentialGroup().addContainerGap().add(BrimPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(CrysPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(EssPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(GranPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap()));
+                jPanel9Layout.createParallelGroup(GroupLayout.LEADING).add(jPanel9Layout.createSequentialGroup().addContainerGap().add(BrimPanel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.RELATED).add(CrysPanel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.RELATED).add(EssPanel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.RELATED).add(GranPanel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addContainerGap()));
 
-        org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
+        GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
-                jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel4Layout.createSequentialGroup().addContainerGap().add(jScrollPane3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(btnAfterResCalc, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 68, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(jPanel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)));
+                jPanel4Layout.createParallelGroup(GroupLayout.LEADING).add(jPanel4Layout.createSequentialGroup().addContainerGap().add(jScrollPane3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.RELATED).add(btnAfterResCalc, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(jPanel9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)));
         jPanel4Layout.setVerticalGroup(
-                jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel4Layout.createSequentialGroup().add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false).add(btnAfterResCalc, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE).add(jScrollPane3)).add(jPanel4Layout.createSequentialGroup().addContainerGap().add(jPanel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 97, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))).addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                jPanel4Layout.createParallelGroup(GroupLayout.LEADING).add(jPanel4Layout.createSequentialGroup().add(jPanel4Layout.createParallelGroup(GroupLayout.LEADING).add(jPanel4Layout.createParallelGroup(GroupLayout.LEADING, false).add(btnAfterResCalc, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE).add(jScrollPane3)).add(jPanel4Layout.createSequentialGroup().addContainerGap().add(jPanel9, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE))).addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         btnBeforeResCalc.setText("SET ->");
         btnBeforeResCalc.addActionListener(new java.awt.event.ActionListener() {
@@ -497,19 +480,19 @@ public class Interface extends javax.swing.JFrame {
         lblBrimRes1.setText("0");
         BrimPanel3.add(lblBrimRes1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 0, 50, -1));
 
-        org.jdesktop.layout.GroupLayout jPanel7Layout = new org.jdesktop.layout.GroupLayout(jPanel7);
+        GroupLayout jPanel7Layout = new GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
-                jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel7Layout.createSequentialGroup().addContainerGap().add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING).add(org.jdesktop.layout.GroupLayout.LEADING, CrysPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, BrimPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, EssPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, GranPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addContainerGap()));
+                jPanel7Layout.createParallelGroup(GroupLayout.LEADING).add(GroupLayout.TRAILING, jPanel7Layout.createSequentialGroup().addContainerGap().add(jPanel7Layout.createParallelGroup(GroupLayout.TRAILING).add(GroupLayout.LEADING, CrysPanel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(GroupLayout.LEADING, BrimPanel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(GroupLayout.LEADING, EssPanel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(GroupLayout.LEADING, GranPanel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addContainerGap()));
         jPanel7Layout.setVerticalGroup(
-                jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel7Layout.createSequentialGroup().addContainerGap().add(BrimPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(CrysPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(EssPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(GranPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap()));
+                jPanel7Layout.createParallelGroup(GroupLayout.LEADING).add(jPanel7Layout.createSequentialGroup().addContainerGap().add(BrimPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.RELATED).add(CrysPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.RELATED).add(EssPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.RELATED).add(GranPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addContainerGap()));
 
-        org.jdesktop.layout.GroupLayout jPanel6Layout = new org.jdesktop.layout.GroupLayout(jPanel6);
+        GroupLayout jPanel6Layout = new GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
-                jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel6Layout.createSequentialGroup().addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(btnBeforeResCalc).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(40, 40, 40)));
+                jPanel6Layout.createParallelGroup(GroupLayout.LEADING).add(jPanel6Layout.createSequentialGroup().addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(jScrollPane2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.RELATED).add(btnBeforeResCalc).addPreferredGap(LayoutStyle.RELATED).add(jPanel7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).add(40, 40, 40)));
         jPanel6Layout.setVerticalGroup(
-                jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel6Layout.createSequentialGroup().add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel6Layout.createSequentialGroup().addContainerGap().add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false).add(btnBeforeResCalc, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 121, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))).add(jPanel6Layout.createSequentialGroup().add(24, 24, 24).add(jPanel7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 97, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))).addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                jPanel6Layout.createParallelGroup(GroupLayout.LEADING).add(jPanel6Layout.createSequentialGroup().add(jPanel6Layout.createParallelGroup(GroupLayout.LEADING).add(jPanel6Layout.createSequentialGroup().addContainerGap().add(jPanel6Layout.createParallelGroup(GroupLayout.LEADING, false).add(btnBeforeResCalc, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(jScrollPane2, GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE))).add(jPanel6Layout.createSequentialGroup().add(24, 24, 24).add(jPanel7, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE))).addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 100));
         jLabel10.setText("}");
@@ -559,19 +542,19 @@ public class Interface extends javax.swing.JFrame {
 
         lblLabelGran2.setText("Total:");
 
-        org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
+        GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
-                jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel3Layout.createSequentialGroup().addContainerGap().add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup().add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING).add(org.jdesktop.layout.GroupLayout.LEADING, CrysPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, BrimPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, EssPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, GranPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addContainerGap()).add(jPanel3Layout.createSequentialGroup().add(lblLabelGran2).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 13, Short.MAX_VALUE).add(lblTotalRes3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 89, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap()))));
+                jPanel3Layout.createParallelGroup(GroupLayout.LEADING).add(jPanel3Layout.createSequentialGroup().addContainerGap().add(jPanel3Layout.createParallelGroup(GroupLayout.LEADING).add(jSeparator1, GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE).add(GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup().add(jPanel3Layout.createParallelGroup(GroupLayout.TRAILING).add(GroupLayout.LEADING, CrysPanel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(GroupLayout.LEADING, BrimPanel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(GroupLayout.LEADING, EssPanel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(GroupLayout.LEADING, GranPanel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addContainerGap()).add(jPanel3Layout.createSequentialGroup().add(lblLabelGran2).addPreferredGap(LayoutStyle.RELATED, 13, Short.MAX_VALUE).add(lblTotalRes3, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE).addContainerGap()))));
         jPanel3Layout.setVerticalGroup(
-                jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel3Layout.createSequentialGroup().addContainerGap().add(BrimPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(CrysPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(EssPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(GranPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(9, 9, 9).add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(lblLabelGran2).add(lblTotalRes3)).addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                jPanel3Layout.createParallelGroup(GroupLayout.LEADING).add(jPanel3Layout.createSequentialGroup().addContainerGap().add(BrimPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.RELATED).add(CrysPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.RELATED).add(EssPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.RELATED).add(GranPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).add(9, 9, 9).add(jSeparator1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.RELATED).add(jPanel3Layout.createParallelGroup(GroupLayout.BASELINE).add(lblLabelGran2).add(lblTotalRes3)).addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
-        org.jdesktop.layout.GroupLayout pnlResCalcLayout = new org.jdesktop.layout.GroupLayout(pnlResCalc);
+        GroupLayout pnlResCalcLayout = new GroupLayout(pnlResCalc);
         pnlResCalc.setLayout(pnlResCalcLayout);
         pnlResCalcLayout.setHorizontalGroup(
-                pnlResCalcLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(pnlResCalcLayout.createSequentialGroup().add(pnlResCalcLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(pnlResCalcLayout.createSequentialGroup().add(pnlResCalcLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false).add(pnlResCalcLayout.createSequentialGroup().addContainerGap().add(jLabel9)).add(jPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(jPanel6, 0, 406, Short.MAX_VALUE)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jLabel10).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).add(pnlResCalcLayout.createSequentialGroup().addContainerGap().add(lblHeaderBefore))).addContainerGap(138, Short.MAX_VALUE)));
+                pnlResCalcLayout.createParallelGroup(GroupLayout.LEADING).add(pnlResCalcLayout.createSequentialGroup().add(pnlResCalcLayout.createParallelGroup(GroupLayout.LEADING).add(pnlResCalcLayout.createSequentialGroup().add(pnlResCalcLayout.createParallelGroup(GroupLayout.LEADING, false).add(pnlResCalcLayout.createSequentialGroup().addContainerGap().add(jLabel9)).add(jPanel4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(jPanel6, 0, 406, Short.MAX_VALUE)).addPreferredGap(LayoutStyle.RELATED).add(jLabel10).addPreferredGap(LayoutStyle.RELATED).add(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)).add(pnlResCalcLayout.createSequentialGroup().addContainerGap().add(lblHeaderBefore))).addContainerGap(138, Short.MAX_VALUE)));
         pnlResCalcLayout.setVerticalGroup(
-                pnlResCalcLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(pnlResCalcLayout.createSequentialGroup().add(pnlResCalcLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(pnlResCalcLayout.createSequentialGroup().add(lblHeaderBefore).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(pnlResCalcLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jLabel10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 294, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(pnlResCalcLayout.createSequentialGroup().add(jPanel6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jLabel9).add(14, 14, 14).add(jPanel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))).add(pnlResCalcLayout.createSequentialGroup().add(123, 123, 123).add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))).addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                pnlResCalcLayout.createParallelGroup(GroupLayout.LEADING).add(pnlResCalcLayout.createSequentialGroup().add(pnlResCalcLayout.createParallelGroup(GroupLayout.LEADING).add(pnlResCalcLayout.createSequentialGroup().add(lblHeaderBefore).addPreferredGap(LayoutStyle.RELATED).add(pnlResCalcLayout.createParallelGroup(GroupLayout.LEADING).add(jLabel10, GroupLayout.PREFERRED_SIZE, 294, GroupLayout.PREFERRED_SIZE).add(pnlResCalcLayout.createSequentialGroup().add(jPanel6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.RELATED).add(jLabel9).add(14, 14, 14).add(jPanel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))).add(pnlResCalcLayout.createSequentialGroup().add(123, 123, 123).add(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))).addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         frmResCalc.getContentPane().add(pnlResCalc, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 750, -1));
 
@@ -583,12 +566,12 @@ public class Interface extends javax.swing.JFrame {
         txtHTMLField.setEditable(false);
         frmNewsPanel.setViewportView(txtHTMLField);
 
-        org.jdesktop.layout.GroupLayout frmNewsLayout = new org.jdesktop.layout.GroupLayout(frmNews.getContentPane());
+        GroupLayout frmNewsLayout = new GroupLayout(frmNews.getContentPane());
         frmNews.getContentPane().setLayout(frmNewsLayout);
         frmNewsLayout.setHorizontalGroup(
-                frmNewsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(frmNewsLayout.createSequentialGroup().add(frmNewsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE).addContainerGap()));
+                frmNewsLayout.createParallelGroup(GroupLayout.LEADING).add(frmNewsLayout.createSequentialGroup().add(frmNewsPanel, GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE).addContainerGap()));
         frmNewsLayout.setVerticalGroup(
-                frmNewsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(frmNewsLayout.createSequentialGroup().addContainerGap().add(frmNewsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE).addContainerGap()));
+                frmNewsLayout.createParallelGroup(GroupLayout.LEADING).add(frmNewsLayout.createSequentialGroup().addContainerGap().add(frmNewsPanel, GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE).addContainerGap()));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
@@ -615,12 +598,12 @@ public class Interface extends javax.swing.JFrame {
 
         sbInput.setViewportView(txtInput);
 
-        org.jdesktop.layout.GroupLayout pnlInputLayout = new org.jdesktop.layout.GroupLayout(pnlInput);
+        GroupLayout pnlInputLayout = new GroupLayout(pnlInput);
         pnlInput.setLayout(pnlInputLayout);
         pnlInputLayout.setHorizontalGroup(
-                pnlInputLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(pnlInputLayout.createSequentialGroup().addContainerGap().add(sbInput, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE).addContainerGap()));
+                pnlInputLayout.createParallelGroup(GroupLayout.LEADING).add(pnlInputLayout.createSequentialGroup().addContainerGap().add(sbInput, GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE).addContainerGap()));
         pnlInputLayout.setVerticalGroup(
-                pnlInputLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(pnlInputLayout.createSequentialGroup().addContainerGap().add(sbInput, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE).addContainerGap()));
+                pnlInputLayout.createParallelGroup(GroupLayout.LEADING).add(pnlInputLayout.createSequentialGroup().addContainerGap().add(sbInput, GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE).addContainerGap()));
 
         pnlBoven.add(pnlInput);
 
@@ -628,12 +611,12 @@ public class Interface extends javax.swing.JFrame {
         txtOutput.setEditable(false);
         sbOutput.setViewportView(txtOutput);
 
-        org.jdesktop.layout.GroupLayout pnlOutputLayout = new org.jdesktop.layout.GroupLayout(pnlOutput);
+        GroupLayout pnlOutputLayout = new GroupLayout(pnlOutput);
         pnlOutput.setLayout(pnlOutputLayout);
         pnlOutputLayout.setHorizontalGroup(
-                pnlOutputLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(pnlOutputLayout.createSequentialGroup().addContainerGap().add(sbOutput, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE).addContainerGap()));
+                pnlOutputLayout.createParallelGroup(GroupLayout.LEADING).add(pnlOutputLayout.createSequentialGroup().addContainerGap().add(sbOutput, GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE).addContainerGap()));
         pnlOutputLayout.setVerticalGroup(
-                pnlOutputLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(sbOutput, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE));
+                pnlOutputLayout.createParallelGroup(GroupLayout.LEADING).add(sbOutput, GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE));
 
         pnlBoven.add(pnlOutput);
 
@@ -686,19 +669,19 @@ public class Interface extends javax.swing.JFrame {
             }
         });
 
-        org.jdesktop.layout.GroupLayout pnlButtonsLayout = new org.jdesktop.layout.GroupLayout(pnlButtons);
+        GroupLayout pnlButtonsLayout = new GroupLayout(pnlButtons);
         pnlButtons.setLayout(pnlButtonsLayout);
         pnlButtonsLayout.setHorizontalGroup(
-                pnlButtonsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(pnlButtonsLayout.createSequentialGroup().addContainerGap().add(CalcButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(PasteCalcButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(ClearButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(btnCountResources, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)));
+                pnlButtonsLayout.createParallelGroup(GroupLayout.LEADING).add(pnlButtonsLayout.createSequentialGroup().addContainerGap().add(CalcButton, GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE).addPreferredGap(LayoutStyle.RELATED).add(PasteCalcButton, GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE).addPreferredGap(LayoutStyle.RELATED).add(ClearButton, GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE).addPreferredGap(LayoutStyle.RELATED).add(btnCountResources, GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)));
         pnlButtonsLayout.setVerticalGroup(
-                pnlButtonsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(pnlButtonsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(CalcButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(PasteCalcButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(ClearButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(btnCountResources, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)));
+                pnlButtonsLayout.createParallelGroup(GroupLayout.LEADING).add(pnlButtonsLayout.createParallelGroup(GroupLayout.BASELINE).add(CalcButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).add(PasteCalcButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).add(ClearButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).add(btnCountResources, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)));
 
-        org.jdesktop.layout.GroupLayout pnlMiddenLayout = new org.jdesktop.layout.GroupLayout(pnlMidden);
+        GroupLayout pnlMiddenLayout = new GroupLayout(pnlMidden);
         pnlMidden.setLayout(pnlMiddenLayout);
         pnlMiddenLayout.setHorizontalGroup(
-                pnlMiddenLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(pnlMiddenLayout.createSequentialGroup().add(pnlMiddenLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(pnlMiddenLayout.createSequentialGroup().addContainerGap().add(txtStatus, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)).add(pnlButtons, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addContainerGap()));
+                pnlMiddenLayout.createParallelGroup(GroupLayout.LEADING).add(pnlMiddenLayout.createSequentialGroup().add(pnlMiddenLayout.createParallelGroup(GroupLayout.LEADING).add(pnlMiddenLayout.createSequentialGroup().addContainerGap().add(txtStatus, GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)).add(pnlButtons, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addContainerGap()));
         pnlMiddenLayout.setVerticalGroup(
-                pnlMiddenLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(pnlMiddenLayout.createSequentialGroup().addContainerGap().add(txtStatus, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 21, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(pnlButtons, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                pnlMiddenLayout.createParallelGroup(GroupLayout.LEADING).add(pnlMiddenLayout.createSequentialGroup().addContainerGap().add(txtStatus, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.RELATED).add(pnlButtons, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         pnlOnder.add(pnlMidden, java.awt.BorderLayout.NORTH);
 
@@ -745,12 +728,12 @@ public class Interface extends javax.swing.JFrame {
 
         TotalLabel.setText("Total:");
 
-        org.jdesktop.layout.GroupLayout pnlResourcesLayout = new org.jdesktop.layout.GroupLayout(pnlResources);
+        GroupLayout pnlResourcesLayout = new GroupLayout(pnlResources);
         pnlResources.setLayout(pnlResourcesLayout);
         pnlResourcesLayout.setHorizontalGroup(
-                pnlResourcesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(pnlResourcesLayout.createSequentialGroup().addContainerGap().add(BrimLabel).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(ResBrimField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(CrysLabel).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(ResCrysField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(EssLabel).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(ResEssField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(GranLabel).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(ResGranField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(TotalLabel).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(ResTotalField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE).addContainerGap()));
+                pnlResourcesLayout.createParallelGroup(GroupLayout.LEADING).add(pnlResourcesLayout.createSequentialGroup().addContainerGap().add(BrimLabel).addPreferredGap(LayoutStyle.RELATED).add(ResBrimField, GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE).addPreferredGap(LayoutStyle.RELATED).add(CrysLabel).addPreferredGap(LayoutStyle.RELATED).add(ResCrysField, GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE).addPreferredGap(LayoutStyle.RELATED).add(EssLabel).addPreferredGap(LayoutStyle.RELATED).add(ResEssField, GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE).addPreferredGap(LayoutStyle.RELATED).add(GranLabel).addPreferredGap(LayoutStyle.RELATED).add(ResGranField, GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE).addPreferredGap(LayoutStyle.RELATED).add(TotalLabel).addPreferredGap(LayoutStyle.RELATED).add(ResTotalField, GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE).addContainerGap()));
         pnlResourcesLayout.setVerticalGroup(
-                pnlResourcesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(pnlResourcesLayout.createSequentialGroup().add(pnlResourcesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(ResCrysField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(ResEssField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(ResGranField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(ResTotalField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(CrysLabel).add(EssLabel).add(GranLabel).add(TotalLabel).add(ResBrimField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(BrimLabel)).addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                pnlResourcesLayout.createParallelGroup(GroupLayout.LEADING).add(pnlResourcesLayout.createSequentialGroup().add(pnlResourcesLayout.createParallelGroup(GroupLayout.BASELINE).add(ResCrysField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).add(ResEssField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).add(ResGranField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).add(ResTotalField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).add(CrysLabel).add(EssLabel).add(GranLabel).add(TotalLabel).add(ResBrimField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).add(BrimLabel)).addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         pnlOnder.add(pnlResources, java.awt.BorderLayout.SOUTH);
 
@@ -973,27 +956,6 @@ public class Interface extends javax.swing.JFrame {
     private void frmLoginWindowClosed(java.awt.event.WindowEvent evt) {
 // TODO add your handling code here:
         // this.dispose();
-    }
-
-    public String getMD5Hash(String str) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            return hex(md.digest(str.getBytes("CP1252")));
-        } catch (NoSuchAlgorithmException e) {
-            theLogger.severe("No MD5 algorythm found: " + e.toString());
-        } catch (UnsupportedEncodingException e) {
-            theLogger.severe("No MD5 encoding supported: " + e.toString());
-        }
-        return null;
-
-    }
-
-    public static String hex(byte[] array) {
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < array.length; ++i) {
-            sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).toUpperCase().substring(1, 3));
-        }
-        return sb.toString();
     }
 
     private void ItemShowResCalcActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1332,13 +1294,9 @@ public class Interface extends javax.swing.JFrame {
                         SetStatus(txtStatus.getText() + " Gem: " + power + " power");
                     }
                 }
-
-
             } else {
                 System.out.println("Res amount exact same as previous, therefore is skipped counting!");
             }
-
-
         } else {
             SetStatus(NoAcces);
         }
@@ -1409,13 +1367,10 @@ public class Interface extends javax.swing.JFrame {
 
         } catch (IllegalStateException ex) {
             SetStatus("ERROR: Couldn't calc resources!)");
-            theLogger.severe("ERROR: RESCALC ERROR: " + ex.toString());
         } catch (ArrayIndexOutOfBoundsException ex) {
             SetStatus("ERROR: Couldn't calc resources!)");
-            theLogger.severe("ERROR: RESCALC ERROR: " + ex.toString());
         } catch (IOException ex) {
             SetStatus("ERROR: Couldn't calc resources!)");
-            theLogger.severe("ERROR: RESCALC ERROR: " + ex.toString());
         }
 
         return res;
@@ -1480,13 +1435,10 @@ public class Interface extends javax.swing.JFrame {
 
         } catch (IllegalStateException ex) {
             SetStatus("ERROR: Couldn't calc resources!)");
-            theLogger.severe("ERROR: RESCALC ERROR: " + ex.toString());
         } catch (ArrayIndexOutOfBoundsException ex) {
             SetStatus("ERROR: Couldn't calc resources!)");
-            theLogger.severe("ERROR: RESCALC ERROR: " + ex.toString());
         } catch (IOException ex) {
             SetStatus("ERROR: Couldn't calc resources!)");
-            theLogger.severe("ERROR: RESCALC ERROR: " + ex.toString());
         }
 
         return res;
@@ -1545,12 +1497,6 @@ public class Interface extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
 
-        /* fetch user data */
-        username = txtUserName.getText();
-        userpass = getMD5Hash(new String(txtUserPassword.getPassword()));
-
-
-         /* probeer reguliere expressies */
         SetStatus("Login succesfull.");
         frmLogin.setEnabled(false);
         frmLogin.setVisible(false);
@@ -1739,12 +1685,10 @@ public class Interface extends javax.swing.JFrame {
             if (OwnCritAantal == 0) {
                 txtStatus.setBackground(Color.white);
                 SetStatus("No! Looks like something went wrong with your list :|");
-                theLogger.info("INFO: List Size is Zero!");
             } else if (CritAantal == 0) {
 
                 txtStatus.setBackground(Color.white);
                 SetStatus("Omigod, nobody is attacking you!");
-                theLogger.info("INFO: Encounter List Size is Zero!");
 
             } else if (CritAantal > OwnCritAantal) {
                 txtStatus.setBackground(Color.white);
@@ -1752,7 +1696,6 @@ public class Interface extends javax.swing.JFrame {
                 SimpleDateFormat formatter = new SimpleDateFormat("H:mm:ss");
                 String datenewformat = formatter.format(today);
                 SetStatus("You cannot defend all creatures! (last calc: " + datenewformat + ")");
-                theLogger.info("INFO: Encounter Size > List Size: Cannot Defend This!");
             } else {
                 int i = 0;
 
@@ -1782,7 +1725,6 @@ public class Interface extends javax.swing.JFrame {
                 SimpleDateFormat formatter = new SimpleDateFormat("H:mm:ss");
                 String datenewformat = formatter.format(today);
 
-                /* als er dood zijn */
                 if (DeadCrits > 0) {
                     txtStatus.setBackground(Color.red);
                     status = (DeadCrits + DIPCrits) + " of your creatures got killed!";
@@ -1828,7 +1770,6 @@ public class Interface extends javax.swing.JFrame {
         String result = "";
 
         clipboard = getToolkit().getSystemClipboard();
-        //odd: the Object param of getContents is not currently used
         Transferable contents = clipboard.getContents(null);
         boolean hasTransferableText = (contents != null) && contents.isDataFlavorSupported(DataFlavor.stringFlavor);
 
@@ -1836,12 +1777,9 @@ public class Interface extends javax.swing.JFrame {
             try {
                 result = (String) contents.getTransferData(DataFlavor.stringFlavor);
             } catch (UnsupportedFlavorException ex) {
-                //highly unlikely since we are using a standard DataFlavor
-                //System.out.println(ex);
-                theLogger.severe("ERROR: " + ex.toString());
+                SetStatus("ERROR:" + ex.toString());
             } catch (IOException ex) {
-                //System.out.println(ex);
-                theLogger.severe("ERROR: " + ex.toString());
+                SetStatus("ERROR:" +ex.toString());
             }
         }
         return result;
@@ -1857,7 +1795,6 @@ public class Interface extends javax.swing.JFrame {
             while ((str = in.readLine()) != null) {
 
                 str = str.trim();
-                //str = str.replaceAll(" ","");
                 str = str.replaceAll("\t", " ");
 
                 Pattern p0 = Pattern.compile("You found a .* Gem");
@@ -1865,126 +1802,37 @@ public class Interface extends javax.swing.JFrame {
 
                 if (str.length() > 0 && m0.find()) {
 
-                    /* enkel gemstring */
-                    String gemstring = m0.group();
                     Pattern p1 = Pattern.compile(" ");
                     String[] gemsplit = p1.split(str);
 
-                    String quality = gemsplit[4].toLowerCase();
-                    String gemname = gemsplit[7].toLowerCase();
-                    int gemlevel = Integer.parseInt(gemsplit[6].toLowerCase());
+                    String quality = gemsplit[3].toLowerCase(); //leve
+                    String gemname = gemsplit[6].toLowerCase(); //gem
+                    int gemlevel = Integer.parseInt(gemsplit[5].toLowerCase()); //gust
 
-                    if (gemname.startsWith("aner")) {
-                        power = 30.0;
-                    } else if (gemname.startsWith("aru")) {
-                        power = 44.4;
-                    } else if (gemname.startsWith("asih")) {
-                        power = 33.6;
-                    } else if (gemname.startsWith("chi")) {
-                        power = 51.6;
-                    } else if (gemname.startsWith("dun")) {
-                        power = 64.0;
-                    } else if (gemname.startsWith("eda")) {
-                        power = 61.5;
-                    } else if (gemname.startsWith("efis")) {
+                    if (gemname.startsWith("blood")) {
+                        power = 97.0;
+                    } else if (gemname.startsWith("void")) {
+                        power = 86.0;
+                    } else if (gemname.startsWith("abyss")) {
+                        power = 77.0;
+                    } else if (gemname.startsWith("aqua")) {
+                        power = 67.0;
+                    } else if (gemname.startsWith("blaze")) {
+                        power = 58.0;
+                    } else if (gemname.startsWith("frost")) {
+                        power = 49.0;
+                    } else if (gemname.startsWith("gust")) {
+                        power = 38.0;
+                    } else if (gemname.startsWith("root")) {
                         power = 28.0;
-                    } else if (gemname.startsWith("efu")) {
-                        power = 55.2;
-                    } else if (gemname.startsWith("eno")) {
-                        power = 42.0;
-                    } else if (gemname.startsWith("faerh")) {
-                        power = 72.0;
-                    } else if (gemname.startsWith("fau")) {
-                        power = 59.3;
-                    } else if (gemname.startsWith("fen")) {
-                        power = 57.1;
-                    } else if (gemname.startsWith("fih")) {
-                        power = 53.3;
-                    } else if (gemname.startsWith("ime")) {
-                        power = 106.6;
-                    } else if (gemname.startsWith("inu")) {
-                        power = 41.0;
-                    } else if (gemname.startsWith("jih")) {
-                        power = 84.2;
-                    } else if (gemname.startsWith("kih")) {
-                        power = 69.6;
-                    } else if (gemname.startsWith("len")) {
-                        power = 76.2;
-                    } else if (gemname.startsWith("lua")) {
-                        power = 80.0;
-                    } else if (gemname.startsWith("mae")) {
-                        power = 123.0;
-                    } else if (gemname.startsWith("muena")) {
-                        power = 100.8;
-                    } else if (gemname.startsWith("mul")) {
-                        power = 114.3;
-                    } else if (gemname.startsWith("nax")) {
-                        power = 533.3;
-                    } else if (gemname.startsWith("nefar")) {
-                        power = 45.6;
-                    } else if (gemname.startsWith("ner")) {
-                        power = 47.1;
-                    } else if (gemname.startsWith("nis")) {
-                        power = 40.0;
-                    } else if (gemname.startsWith("nuy")) {
-                        power = 200.0;
-                    } else if (gemname.startsWith("qaera")) {
-                        power = 252.0;
-                    } else if (gemname.startsWith("qah")) {
-                        power = 145.5;
-                    } else if (gemname.startsWith("qer")) {
-                        power = 133.0;
-                    } else if (gemname.startsWith("qulah")) {
-                        power = 38.8;
-                    } else if (gemname.startsWith("ruh")) {
-                        power = 45.7;
-                    } else if (gemname.startsWith("sah")) {
-                        power = 48.6;
-                    } else if (gemname.startsWith("tur")) {
-                        power = 43.2;
-                    } else if (gemname.startsWith("uax")) {
-                        power = 533.3;
-                    } else if (gemname.startsWith("uka")) {
-                        power = 66.7;
-                    } else if (gemname.startsWith("urtae")) {
-                        power = 168.0;
-                    } else if (gemname.startsWith("uxi")) {
-                        power = 533.3;
-                    } else if (gemname.startsWith("uyi")) {
-                        power = 228.6;
-                    } else if (gemname.startsWith("uza")) {
-                        power = 94.2;
-                    } else if (gemname.startsWith("vae")) {
-                        power = 72.7;
-                    } else if (gemname.startsWith("var")) {
-                        power = 50.0;
-                    } else if (gemname.startsWith("xil")) {
-                        power = 266.7;
-                    } else if (gemname.startsWith("xio")) {
-                        power = 533.3;
-                    } else if (gemname.startsWith("xis")) {
-                        power = 533.3;
-                    } else if (gemname.startsWith("yar")) {
-                        power = 160.0;
-                    } else if (gemname.startsWith("ycom")) {
-                        power = 1337.0;
-                    } else if (gemname.startsWith("yun")) {
-                        power = 177.8;
-                    } else if (gemname.startsWith("zaneh")) {
-                        power = 56.0;
-                    } else if (gemname.startsWith("zar")) {
-                        power = 100.0;
-                    } else if (gemname.startsWith("zey")) {
-                        power = 88.9;
                     }
-
 
                     if (quality.startsWith("beautiful")) {
                         power = power * 1.2;
                     } else if (quality.startsWith("magnificent")) {
-                        power = power * 1.4;
+                        power = power * 1.5;
                     } else if (quality.startsWith("exquisite")) {
-                        power = power * 1.6;
+                        power = power * 1.9;
                     }
 
                     power = Math.round(power * gemlevel);
@@ -1992,7 +1840,7 @@ public class Interface extends javax.swing.JFrame {
                 }
             }
         } catch (Exception e) {
-            theLogger.warning("Gem found, but not correct syntax: " + e.toString());
+            return 0;
         }
 
         return (int) power;

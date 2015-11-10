@@ -1,16 +1,14 @@
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Created by darkmage530 on 10/17/2015.
  */
 public class Battle {
 
-    private static Logger theLogger = Logger.getLogger(Battle.class.getName());
-
-
     public CombatResult doBattle(Crit ownCrit, Crit enemyCrit, int battleNum, StringBuilder sb, boolean ShowFullBattles,
                                  List<Crit> ownCrits, List<Crit> enemyCrits, boolean test) {
+
+
 
         int enemyDamage = enemyCrit.getDamage();
         int enemyHealth = enemyCrit.getHealth();
@@ -21,6 +19,21 @@ public class Battle {
 
         int enemyDefense = getDefense(enemyCrit, ownCrit);
         int ownDefense = getDefense(ownCrit, enemyCrit);
+
+        if (ownCrit.getEnchantType() != null && !ownCrit.getEnchantType().equals("")) {
+            if (ownCrit.getEnchantAgainst() != null && !ownCrit.getEnchantAgainst().equals("")) {
+                CritRaces enchantCritRace = CritRaces.fromString(ownCrit.getEnchantAgainst());
+                if(enemyCrit.getRace() == enchantCritRace) {
+                    if (ownCrit.getEnchantType().equals("Immunity")) {
+                        ownDefense = 100;
+                    } else if (ownCrit.getEnchantType().equals("Rage")) {
+                        ownDamage = ownDamage * 2;
+                    } else if (ownCrit.getEnchantType().equals("Tranquility")) {
+                        ownHealth = ownHealth * 2;
+                    }
+                }
+            }
+        }
 
 
         switch (ownCrit.getRace()) {
@@ -127,8 +140,8 @@ public class Battle {
                 break;
         }
 
-        ownDefense = checkDefenses(ownDefense);
-        enemyDefense = checkDefenses(enemyDefense);
+        ownDefense = checkDefenses(ownDefense, ownCrit.getRace());
+        enemyDefense = checkDefenses(enemyDefense, enemyCrit.getRace());
         if (!test) {
             sb.append("<i>Battle&nbsp;" + battleNum + "</i>&nbsp;&nbsp;&nbsp;<b>" + ownCrit.getName() + " " + (ownCrit.getDamage()) + "/" + (ownCrit.getHealth()) + " " + ownCrit.getItem() + "</b><br>");
             sb.append("- <i>vs</i> -&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>" + enemyCrit.getName() + " " + (enemyCrit.getDamage()) + "/" + (enemyCrit.getHealth()) + " " + enemyCrit.getItem() + "</b><br>");
@@ -273,8 +286,8 @@ public class Battle {
                     break;
             }
 
-            ownDefense = checkDefenses(ownDefense);
-            enemyDefense = checkDefenses(enemyDefense);
+            ownDefense = checkDefenses(ownDefense, ownCrit.getRace());
+            enemyDefense = checkDefenses(enemyDefense, enemyCrit.getRace());
 
             //Calculate Damage for Combat
             combatOwnDamage = Math.round((150 - enemyDefense) * ownDamage / 100.0f);
@@ -454,7 +467,6 @@ public class Battle {
         } else if (opposingCrit.getMageClass().equals("Nature")) {
             return defenseNeededCrit.getNatureDef();
         } else {
-            theLogger.warning("This Creature Type is Not Found='" + opposingCrit.getMageClass() + "'");
             return 0;
         }
     }
@@ -495,7 +507,17 @@ public class Battle {
         }
     }
 
-    private int checkDefenses(int defense) {
+    private int checkDefenses(int defense, CritRaces race) {
+        if (race.equals(CritRaces.PEGASUS) || race.equals(CritRaces.TETRAMORPH) || race.equals(CritRaces.NYMPH) || race.equals(CritRaces.SHINIMGAI)) {
+            if (defense > 150) {
+                return 149;
+            } else if (defense > 0) {
+                return defense;
+            } else {
+                return 0;
+            }
+        }
+
         if (defense > 140) {
             return 140;
         } else if (defense < 0) {
